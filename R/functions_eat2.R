@@ -1,0 +1,378 @@
+# Functions EAT2 ####
+
+f_eat2_rename_df <- function(df) {
+  colnames(df) <- gsub("   ", " ", colnames(df))
+  colnames(df) <- gsub("  ", " ", colnames(df))
+  return(df)
+}
+
+f_eat2_char2num_col <- function(
+  input_string,
+  excluded_terms = c("ND|NQ|NR"),
+  allowed_chars = c(as.character(0:9), ".")
+) {
+  # sapply(input_string, function(x) {
+  #   if (str_detect(x, excluded_terms) %in% c(NA, TRUE)) { # s'il y a des termes exclus
+  #     return(NA)
+  #   } else {
+  #     return(x)
+  #   }
+  # })  %>% 
+  #   as.vector() -> output_string
+  
+  sapply(input_string, function(x) {
+    if (is.na(x)|(str_detect(x, "NR"))) return(NA)
+    else if (str_detect(x, "ND|<")) return("ND")
+    else if (str_detect(x, "NQ")) return("NQ")
+    else return(x)
+  }) %>%
+    as.vector() -> output_string
+  
+  return(output_string)
+}
+
+f_eat2_char2num_df <- function(
+  input_df,
+  vars,
+  allowed_chars = c(as.character(0:9), ".")
+) {
+  
+  ddf <- select(input_df, !any_of(vars))
+  
+  apply(ddf, 2, function(x) f_eat2_char2num_col(x)) %>% as.data.frame() -> ddf_out
+  
+  output <- cbind(select(input_df, any_of(vars)),
+                  ddf_out)
+
+  return(output)
+}
+
+
+
+f_eat2_check_by_food <- function(
+    d,
+    food_list,
+    food_table, ## data frame with the all the names of food and corresponding food groups
+    subs_table, ## data frame with the all the names of substances and corresponding element of list in d
+    vars
+) {
+  
+  lapply(d, function(dst) { ## pour chaque famille de substances
+    subs_list <- names(dst)[!names(dst) %in% vars] ## extraire la liste des substances concernees
+    
+    # dst_food <- subset(dst, `Libellé` %in% food_list) ## extraire les donnees correspondant aux food input
+    mat_out <- matrix(data = NA, nrow = length(food_list), ncol = length(subs_list))
+
+    lapply(food_list, function(fi) { # pour chaque aliment en input
+      sapply(subs_list, function(sb) { # pour chaque substance a regarder dans la liste
+        if (all(is.na(dst[dst$`Libellé`== fi ,sb]))) { #s'il y a aucune analyse faite (que des NA dans la colonne), retourner NA
+          return(NA)
+        } else { ## sinon
+          
+          dst %>%
+            select(., `Type`, `Libellé`, sb) %>%
+            filter(., `Libellé` == fi) -> ext_dst ## extraire des donnees correspondant a la substance sb et l'aliment fi
+          
+          # enlever les lignes avec donnees non quantifiees
+          ext_dst[[sb]] <- suppressWarnings(as.numeric(ext_dst[[sb]])) # conversion string en valeur numerique, si ND/NQ/NR ça devient NA
+          ext_dst <- ext_dst[!is.na(ext_dst[[sb]]), ]
+          
+          # compter le nombre de donnees quantifiees nationales et regionales
+          ndq_R <- length(ext_dst$Type[ext_dst$Type == "R"])
+          ndq_N <- length(ext_dst$Type[ext_dst$Type == "N"])
+          
+          if (ndq_N >= 1 || ndq_R >= 2) { # s'il y a au moins une donnees nationales ou deux donnees regionales
+            return(1) # matrice de presence significative = 1
+          } else {
+            return(0) # matrice de presence significative = 0
+          }
+        }
+      }) %>%
+        as.vector() # end sapply(subs_list)
+    }) %>%
+      do.call(rbind, .) %>%
+      as.matrix() -> mat_out
+    
+    return(mat_out)
+    
+  }) -> list_mat_out
+
+  return(list_mat_out)
+}
+
+
+# f_eat2_plot_check_by_food <- function(
+#     d,
+#     food_input,
+#     subsgrp_input,
+#     food_table,
+#     subs_table,
+#     vars,
+#     frac_gr = 50
+# ) {
+#   
+#   f_eat2_check_by_food(d = d,
+#                          food_input = food_input,
+#                          food_table = food_tab,
+#                          subs_table = subs_tab,
+#                          vars = vars) -> mat_out
+#   
+#   NCOL <- ncol(mat_out[[subsgrp_input]])
+#   
+#   
+#   if (NCOL > frac_gr) {
+#     ngraph <- ceiling(NCOL/frac_gr)
+# 
+#     par(mfrow = c(ngraph, 1))
+# 
+#     for (gr in 1:ngraph) {
+#       corrplot::corrplot(mat_out[[subsgrp_input]][, seq(from = (gr-1)*frac_gr+1, to = min(gr*frac_gr, NCOL))],
+#                          method = "circle", is.corr = F, cl.pos = "n",
+#                          tl.col="black", tl.cex=0.8, tl.srt = 45)
+#     }
+#   } else {
+#     par(mfrow = c(1,1))
+#     corrplot::corrplot(mat_out[[subsgrp_input]],
+#                        method = "circle", is.corr = F, cl.pos = "n",
+#                        tl.col="black", tl.cex=0.8, tl.srt = 45)
+#   }
+# 
+#   par(mfrow = c(1,1))
+# 
+# }
+
+
+
+
+
+
+
+
+
+
+# f_eat2_check_by_subs <- function(
+#     d,
+#     subs_input,
+#     food_table, ## data frame with the all the names of food and corresponding food groups
+#     subs_table, ## data frame with the all the names of substances and corresponding element of list in d
+#     vars
+# ) {
+#   
+#   tapply(food_table$food, food_table$food_grp, function(x) {
+#     mat_food <- matrix(data = NA, nrow = length(x), ncol = length(subs_input))
+#     rownames(mat_food) <- x
+#     colnames(mat_food) <- subs_input
+#     
+#     for (fi in x) {
+#       for (sb in subs_input) {
+#         ## recherche la famille de la substance dans le catalogue des substances
+#         sbgr <- subset(subs_table, subs == sb)$subs_grp
+#         
+#         data_sb_fi <- subset(d[[sbgr]], `Libellé` == fi)[, sb]
+#         
+#         if (all(is.na(data_sb_fi))) {
+#           mat_food[fi, sb] <- 0
+#         } else {
+#           mat_food[fi, sb] <- 1
+#         }
+#       }
+#     }
+#     
+#     return(mat_food)
+#   }) -> output
+#   
+#   return(output)
+# }
+
+
+
+# f_eat2_plot_check_by_subs <- function(
+#     d,
+#     subs_input,
+#     foodgrp_input, ## only for visualisation
+#     food_table,
+#     subs_table,
+#     vars,
+#     frac_gr = 50
+# ) {
+#   
+#   f_eat2_check_by_subs(d = d,
+#                          subs_input = subs_input,
+#                          food_table = food_table,
+#                          subs_table = subs_table,
+#                          vars = vars) -> mat_out
+#   
+#   par(mfrow = c(1,1))
+#   corrplot::corrplot(mat_out[[foodgrp_input]],
+#                      method = "circle", is.corr = T, cl.pos = "n",
+#                      tl.col="black", tl.cex=0.8, tl.srt = 45)
+#   
+# 
+# }
+
+
+
+
+
+f_eat2_plot_check <- function(
+  df_mp, # presence matrix (pre-calculated by the function f_eat2_check_by_food)
+  food_input,
+  subs_input
+) {
+  
+  # recuperer les valeurs correspondant aux aliments selectionnes
+  df_mp %>%
+    subset(., `Libellé` %in% food_input) -> df_mp_input 
+  
+  # recuperer les noms dans le bon ordre
+  RN <- df_mp_input$`Libellé` 
+
+  # selectionner seulement les substances interessees et convertir en matrice
+  df_mp_input %>%
+    dplyr::select(., any_of(subs_input)) %>%
+    as.matrix() -> mat_presence_input
+
+  # renommer les lignes de la matrice avec les noms dans le bon ordre
+  rownames(mat_presence_input) <- RN
+  
+  # convertir en valeur fictive pour graphique
+  mat_presence_input[mat_presence_input == 0] <- 0.25
+  mat_presence_input[is.na(mat_presence_input)] <- 0
+
+  corrplot::corrplot(mat_presence_input,
+                     method = "circle", is.corr = T, cl.pos = "n",
+                     tl.col="black", tl.cex=0.8, tl.srt = 45)
+ 
+  # return(mat_presence_input)
+   
+}
+
+
+
+
+f_eat2_extract_data <- function(
+  d, ## list of data frames
+  food_input,
+  subs_input,
+  food_table, ## data frame with the all the names of food and corresponding food groups
+  subs_table, ## data frame with the all the names of substances and corresponding element of list in d
+  vars ## additional variables to extract (ex. food names, food groups names, regions, year...)
+) {
+  
+  subsgrp <- subs_table$subs_grp[subs_table$subs %in% subs_input]
+  
+  d_subsgrp <- d[[unique(subsgrp)]]
+  
+  d_output <- d_subsgrp[d_subsgrp$`Libellé` %in% food_input, c(vars, subs_input)]
+  
+  return(d_output)
+}
+
+
+
+
+
+f_eat2_carto_conta <- function(
+    d,
+    food_input,
+    subs_input,
+    food_table,
+    subs_table,
+    vars,
+    frsf,
+    path_rawgraph = "data/raw/FRA_adm1.rds"
+) {
+  ## extraction des donnees correspondant au couple selectionne  
+  f_eat2_extract_data(d = d,
+                      food_input = food_input,
+                      subs_input = subs_input,
+                      food_table = food_table,
+                      subs_table = subs_table,
+                      vars = vars) -> ext_data
+  
+  ## transformer en numérique
+  ext_data[[subs_input]] <- suppressWarnings(as.numeric(ext_data[[subs_input]]))
+  
+  ## enlever les lignes avec NA
+  ext_data <- ext_data[!is.na(ext_data[, subs_input]), ]
+  
+  frsf_out <- cbind(frsf, conta = NA)
+  
+  if (nrow(ext_data) > 0) { ## s'il y a des donnees dans le tableau
+    
+    if ("N" %in% ext_data$Type) { ## s'il y a des donnees nationales,
+      ## alors, par defaut assigner cette valeur nationale pour toutes les regions (sauf la Corse)
+      frsf_out$conta <- mean(subset(ext_data, Type == "N")[, subs_input])
+      frsf_out$conta[frsf_out$NAME_1 == "Corse"] <- NA 
+    }
+    
+    if ("R" %in% ext_data$Type) { ## s'il y a des donnees regionales
+      ## recuperer les valeurs moyennes par regions
+      obs_conta <- tapply(ext_data[[subs_input]], ext_data$`Région`, mean, na.rm = TRUE)
+      
+      ## assigner region par region
+      for (rg in names(obs_conta)) {
+        frsf_out$conta[frsf_out$EAT2_region == rg] <- obs_conta[[rg]]
+      }
+    }
+    
+    if (length(unique(ext_data$`Région`)) == 1) { ## s'il y a uniquement une region/uniquement nationale
+      plot(readRDS(path_rawgraph))
+      
+      if (unique(ext_data$`Région`) == 99) { ## plotter des donnees nationales
+        plot(st_geometry(frsf_out[frsf_out$NAME_1 != "Corse",]),
+             border = "navyblue",lwd=2,legend=T, add=T)
+        legendN <- paste("Aliment: ", food_input, " --- ",
+                         "Substance: ", subs_input, "\n",
+                         "Moyenne nationale: ", mean(subset(ext_data, Type == "N")[, subs_input]), " (", unique(ext_data$`Unité`), ")",
+                         sep = "")
+        legend("bottomleft", legend = legendN, lwd = 2, col = "navyblue", bty = "n", cex = 0.8)
+        
+      } else { ## plotter des donnees regionales
+        
+        region_ID <- reg_code$ID_1[reg_code$EAT2_Region == unique(ext_data$`Région`)]
+        plot(st_geometry(frsf_out[frsf_out$ID_1 %in% region_ID,]),
+             border = "darkred",lwd = 3, legend=T, add=T)
+        legendR <- paste("Aliment: ", food_input, " --- ",
+                         "Substance: ", subs_input, "\n",
+                         "Moyenne régionale: ", mean(subset(ext_data, Type == "R")[, subs_input]), " (", unique(ext_data$`Unité`), ")",
+                         sep = "")
+        legend("bottomleft", legend = legendR, lwd = 3, col = "darkred", bty = "n", cex = 0.8)
+        
+      }
+      
+    } else {
+      choroLayer(frsf_out,
+                 var = "conta",
+                 method = "quantile",
+                 legend.values.rnd = 6,
+                 legend.pos = "bottomleft",
+                 legend.title.txt = paste("Aliment: ", food_input, "\n",
+                                          "Substance: ", subs_input, " (", unique(ext_data$`Unité`), ")", sep = ""),
+                 legend.nodata = "Analyses non réalisées \nSubstances non détectées",
+                 nclass = min(5, length(unique(ext_data$`Région`))))
+    }
+    
+  } else { # sinon, s'il n'y a aucune donnees, plotter la carte vierge
+    plot(readRDS(path_rawgraph))
+  }
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
