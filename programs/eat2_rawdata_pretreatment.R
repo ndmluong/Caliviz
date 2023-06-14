@@ -17,8 +17,8 @@ df_eat2_raw <- list(`Acrylamide` = read_excel(path = "data/raw/PASER2006sa0361-A
                     `Pesticides` = read_excel(path = "data/raw/PASER2006sa0361-An02.xlsx", sheet = "Pesticides"),
                     `BPA` = read_excel(path = "data/raw/donnees-bpa-eat2-lhn.xlsx", sheet = "BPA"))
 
-df_eat2_raw$`Dioxines, PCB` %>% select(., - `Lipides (%)`) -> df_eat2_raw$`Dioxines, PCB`
-df_eat2_raw$`BPA` %>% select(., - `LOD/LOQ`) -> df_eat2_raw$`BPA`
+df_eat2_raw$`Dioxines, PCB` %>% dplyr::select(., - `Lipides (%)`) -> df_eat2_raw$`Dioxines, PCB`
+df_eat2_raw$`BPA` %>% dplyr::select(., - `LOD/LOQ`) -> df_eat2_raw$`BPA`
 
 # Common variables ####
 com_var_eat2 <- c("Groupe de la nomenclature INCA 2",
@@ -73,6 +73,7 @@ f_eat2_check_by_food(d = df_eat2,
   as.data.frame() %>%
   mutate(., `Libellé` = food_tab_eat2$food, .before = 1) -> df_mat_presence_eat2
 
+colnames(df_mat_presence_eat2) <- c("Libellé", subs_tab_eat2$subs)
 
 # Cartography ####
 ## Cartography data
@@ -81,8 +82,32 @@ frsf <- sf::st_as_sf(readRDS("data/raw/FRA_adm1.rds"), "sf")
 ## Region code correspondence ####
 reg_code <- read_excel(path = "data/raw/reg_code.xlsx", sheet = "reg_code")
 
-frsf <- mutate(frsf, EAT2_region = as.character(reg_code$EAT2_Region), .after = NAME_1)
+sf_FRA1 <- mutate(frsf, EAT2_region = as.character(reg_code$EAT2_Region), .after = NAME_1)
+
+raw_rds_FRA1 <- readRDS("data/raw/FRA_adm1.rds")
 
 rm(df_eat2_raw)
 
-save.image("data/processed/processed_data_eat2.RData")
+# Pretreated censored data ####
+df_eat2_censored <- list(`Acrylamide` = read.csv(file = "data/processed/Acrylamide.csv", header = TRUE),
+                         `HAP` = read.csv(file = "data/processed/HAP.csv", header = TRUE),
+                         `Dioxines, PCB` = read.csv(file = "data/processed/Dioxines PCB.csv", header = TRUE),
+                         `Perfluorés` = read.csv(file = "data/processed/Perfluorés.csv", header = TRUE),
+                         `Bromés` = read.csv(file = "data/processed/Bromés.csv", header = TRUE),
+                         `Contaminants inorg et minéraux` = read.csv(file = "data/processed/Contaminants inorg et minéraux.csv", header = TRUE),
+                         # `Phytoestrogènes` = read.csv(file = "data/processed/Acrylamide.csv", header = TRUE),
+                         # `Mycotoxines` = read.csv(file = "data/processed/Acrylamide.csv", header = TRUE),
+                         `Additifs` = read.csv(file = "data/processed/Acrylamide.csv", header = TRUE),
+                         # `BPA` = read.csv(file = "data/processed/Acrylamide.csv", header = TRUE),
+                         `Pesticides` = read.csv(file = "data/processed/Acrylamide.csv", header = TRUE))
+
+lapply(df_eat2_censored, function(x) {
+  colnames(x) <- chartr(".", " ", colnames(x))
+  return(x)
+}) -> df_eat2_censored
+
+df_eat2_censored$`Dioxines, PCB`$`Famille de substances` <- "Dioxines, PCB"
+df_eat2_censored$`Dioxines, PCB` <- subset(df_eat2_censored$`Dioxines, PCB`, Substance != "Lipides (%)" )
+
+
+save.image("data/processed/processed_data_eat2_V3.RData")

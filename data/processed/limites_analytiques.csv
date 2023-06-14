@@ -1,0 +1,121 @@
+Abréviation,Substance,Type de matrice,Limite de détection,Limite de quantification,Unité
+Acrylamide,Acrylamide,Toute matrice,4,10,µg/kg
+Ag,Argent,Toute matrice,0.042,0.084,mg/kg
+Al,Aluminium,Toute matrice,0.236,0.472,mg/kg
+As,Arsenic,Toute matrice,0.005,0.010,mg/kg
+Ba,Baryum ,Toute matrice,0.045,0.090,mg/kg
+Ca,Calcium ,Toute matrice,12.85,25.7,mg/kg
+Cd,Cadmium,Toute matrice,0.0005,0.001,mg/kg
+Co,Cobalt,Toute matrice,0.001,0.002,mg/kg
+Cr,Chromium,Toute matrice,0.01,0.020,mg/kg
+Cu,Cuivre,Toute matrice,0.0115,0.023,mg/kg
+Fe,Fer ,Toute matrice,0.043,0.086,mg/kg
+Ga,Gallium,Toute matrice,0.001,0.002,mg/kg
+Ge,Germanium,Toute matrice,0.0015,0.003,mg/kg
+Hg,Mercure ,Toute matrice,0.005,0.010,mg/kg
+K,Potassium,Toute matrice,4.05,8.10,mg/kg
+Li,Lithium,Toute matrice,0.0005,0.001,mg/kg
+Mg,Magnésium,Toute matrice,2.915,5.83,mg/kg
+Mn,Manganese,Toute matrice,0.0075,0.015,mg/kg
+Mo,Molybdène,Toute matrice,0.0055,0.011,mg/kg
+Na,Sodium ,Toute matrice,5.55,11.1,mg/kg
+Ni,Nickel,Toute matrice,0.0265,0.053,mg/kg
+Pb,Plomb ,Toute matrice,0.0025,0.005,mg/kg
+Sb,Antimoine,Toute matrice,0.0005,0.001,mg/kg
+Se,Selenium,Toute matrice,0.05,0.100,mg/kg
+Sn,Etain,Toute matrice,0.0015,0.003,mg/kg
+Sr,Strontium,Toute matrice,0.0065,0.013,mg/kg
+Te,Tellure ,Toute matrice,0.001,0.002,mg/kg
+V,Vanadium,Toute matrice,0.01,0.020,mg/kg
+Zn,Zinc,Toute matrice,0.05,0.100,mg/kg
+AN,Anthracene,,,,
+BaA,Benzo(a)Anthracène,,,,
+BaP,Benzo[a]Pyrène,,,,
+BbF,Benzo(b)fluoranthène ,,,,
+BcFL,Benzo[c]fluorene,,,,
+BghiP,Benzo[ghi]perylene,,,,
+BjF,Benzo(j)fluoranthène ,,,,
+BkF,Benzo(k)fluoranthène ,,,,
+CHR,Chrysène,,,,
+CPP,Cyclopenta[cd]pyrene,,,,
+DbaeP,"Dibenzo[a,e]pyrene",,,,
+DBahA,"Dibenz[a,h]anthracene",,,,
+DbahP,"DiBenzo[a,h]Pyrène",,,,
+DbaiP,"Dibenzo[a,i]pyrene",,,,
+DbalP,"Dibenzo[a,l]pyrene",,,,
+FA,Fluoranthene,,,,
+IP,Idenopyrene,,,,
+MCH,5-methylchrysene,,,,
+PHE,Phenanthrene ,,,,
+PY,Pyrene,,,,
+15-Ac-DON,15-acétyldéoxynivalénol ,Matrice liquide,0.3,1,µg/kg
+15-Ac-DON,15-acétyldéoxynivalénol ,Matrice solide,3,10,µg/kg
+3-Ac-DON,3-acétyldéoxynivalénol ,Matrice liquide,0.3,1,µg/kg
+3-Ac-DON,3-acétyldéoxynivalénol ,Matrice solide,3,10,µg/kg
+AFB1,Aflatoxines B1,Toute matrice,0.05,0.2,µg/kg
+AFB2,Aflatoxines B2,Toute matrice,0.05,0.2,µg/kg
+AFG1,Aflatoxines G1,Toute matrice,0.05,0.2,µg/kg
+AFG2,Aflatoxines G2,Toute matrice,0.05,0.2,µg/kg
+AFM1,Aflatoxines M1,Matrice liquide,0.001,0.005,µg/kg
+AFM1,Aflatoxines M1,Matrice solide,0.01,0.05,µg/kg
+alpha-ZAL,Alpha zéaralanol ,Matrice liquide,0.15,0.5,µg/kg
+alpha-ZAL,Alpha zéaralanol ,Matrice solide,1.5,5,µg/kg
+alpha-ZOL,Alpha zéaralénol ,Matrice liquide,0.15,0.5,µg/kg
+alpha-ZOL,Alpha zéaralénol ,Matrice solide,1.5,5,µg/kg
+beta-ZAL,Bêta zéaralanol,Matrice liquide,0.15,0.5,µg/kg
+beta-ZAL,Bêta zéaralanol,Matrice solide,1.5,5,µg/kg
+beta-ZOL,Bêta zéaralénol,Matrice liquide,0.15,0.5,µg/kg
+beta-ZOL,Bêta zéaralénol,Matrice solide,1.5,5,µg/kg
+DAS,diacétoxyscirpénol,Matrice liquide,0.3,1,µg/kg
+DAS,diacétoxyscirpénol,Matrice solide,3,10,µg/kg
+DOM1,dérivé déépoxyde du DON ,Matrice liquide,0.3,1,µg/kg
+DOM1,dérivé déépoxyde du DON ,Matrice solide,3,10,µg/kg
+DON,déoxynivalénol,Matrice liquide,0.3,1,µg/kg
+DON,déoxynivalénol,Matrice solide,3,10,µg/kg
+FB1,Fumonisine B1,Toute matrice,2,10,µg/kg
+FB2,Fumonisine B2,Toute matrice,2,10,µg/kg
+HT2,Toxine HT2,Matrice liquide,0.3,1,µg/kg
+HT2,Toxine HT2,Matrice solide,3,10,µg/kg
+MAS,monoacétoxyscirpénol ,Matrice liquide,0.3,1,µg/kg
+MAS,monoacétoxyscirpénol ,Matrice solide,3,10,µg/kg
+NIV,Nivalenol,Matrice liquide,0.3,1,µg/kg
+NIV,Nivalenol,Matrice solide,3,10,µg/kg
+OTA,Ochratoxine A,Matrice liquide,0.01,0.05,µg/kg
+OTA,Ochratoxine A,Matrice solide,0.2,0.5,µg/kg
+OTB,Ochratoxine B,Matrice liquide,0.01,0.05,µg/kg
+OTB,Ochratoxine B,Matrice solide,0.2,0.5,µg/kg
+Pat,Patuline,Matrice liquide,3,10,µg/kg
+Pat,Patuline,Matrice solide,6,20,µg/kg
+T2,Toxine T2,Matrice liquide,0.3,1,µg/kg
+T2,Toxine T2,Matrice solide,3,10,µg/kg
+Ver,Verrucarol,Matrice liquide,0.3,1,µg/kg
+Ver,Verrucarol,Matrice solide,3,10,µg/kg
+ZEA,zéaralénone,Matrice liquide,0.15,0.5,µg/kg
+ZEA,zéaralénone,Matrice solide,1.5,5,µg/kg
+PFBA,Acide perfluorobutanoïque,,,,
+PFBS,Perfluorobutane sulfonate,,,,
+PFDA,Acide perfluorodecanoïque,,,,
+PFDoA,Acide perfluorododecanoïque,,,,
+PFDS,Perfluorodecane sulfonate,,,,
+PFHpA,Acide perfluoroheptanoïque,,,,
+PFHpS,Perfluorohptane sulfonate,,,,
+PFHxA,Acide perfluorohexanoïque,,,,
+PFHxS,Perfluorohexane sulfonate,,,,
+PFNA,Acide perfluorononanoïque,,,,
+PFOA,Acide perfluoroocanoïque,,,,
+PFOS,Perfluorooctane sulfonate,,,,
+PFPA,Acide perfluoropentanoïque,,,,
+PFTeDA,Acide perfluorotetradecanoïque,,,,
+PFTrDA,Acide perfluorotridecanoïque,,,,
+PFUnA,Acide perfluoroundecanoïque,,,,
+Biochanine_A,Biochanine_A,Toute matrice,,0.6, ng/g
+Coumestrol,Coumestrol,Toute matrice,,0.5, ng/g
+Daidzeine,Daidzeine,Toute matrice,,0.3, ng/g
+Enterolactone,Enterolactone,Toute matrice,,1.0, ng/g
+Equol,Equol,Toute matrice,,2.0, ng/g
+Formononetine,Formononetine,Toute matrice,,0.9, ng/g
+Genisteine,Genisteine,Toute matrice,,0.2, ng/g
+Glyciteine,Glyciteine,Toute matrice,,0.1, ng/g
+Matairesinol,Matairesinol,Toute matrice,,0.1, ng/g
+Resveratrol,Resveratrol,Toute matrice,,0.7, ng/g
+Secoisolariciresinol,Secoisolariciresinol,Toute matrice,,0.4, ng/g

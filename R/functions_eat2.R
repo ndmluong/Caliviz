@@ -37,11 +37,11 @@ f_eat2_char2num_df <- function(
   allowed_chars = c(as.character(0:9), ".")
 ) {
   
-  ddf <- select(input_df, !any_of(vars))
+  ddf <- dplyr::select(input_df, !any_of(vars))
   
   apply(ddf, 2, function(x) f_eat2_char2num_col(x)) %>% as.data.frame() -> ddf_out
   
-  output <- cbind(select(input_df, any_of(vars)),
+  output <- cbind(dplyr::select(input_df, any_of(vars)),
                   ddf_out)
 
   return(output)
@@ -58,8 +58,9 @@ f_eat2_check_by_food <- function(
 ) {
   
   lapply(d, function(dst) { ## pour chaque famille de substances
+
     subs_list <- names(dst)[!names(dst) %in% vars] ## extraire la liste des substances concernees
-    
+    print(subs_list)
     # dst_food <- subset(dst, `Libellé` %in% food_list) ## extraire les donnees correspondant aux food input
     mat_out <- matrix(data = NA, nrow = length(food_list), ncol = length(subs_list))
 
@@ -69,19 +70,41 @@ f_eat2_check_by_food <- function(
           return(NA)
         } else { ## sinon
           
+          # ## Règle V1: matrice de presence significative = 1 s'il y a au moins une donnee nationales ou deux donnees regionales quantifiees
+          # 
+          # dst %>%
+          #   dplyr::select(., `Type`, `Libellé`, sb) %>%
+          #   filter(., `Libellé` == fi) -> ext_dst ## extraire des donnees correspondant a la substance sb et l'aliment fi
+          # 
+          # # enlever les lignes avec donnees non quantifiees
+          # ext_dst[[sb]] <- suppressWarnings(as.numeric(ext_dst[[sb]])) # conversion string en valeur numerique, si ND/NQ/NR ça devient NA
+          # ext_dst <- ext_dst[!is.na(ext_dst[[sb]]), ]
+          # 
+          # # compter le nombre de donnees quantifiees nationales et regionales
+          # ndq_R <- length(ext_dst$Type[ext_dst$Type == "R"])
+          # ndq_N <- length(ext_dst$Type[ext_dst$Type == "N"])
+          # 
+          # if (ndq_N >= 1 || ndq_R >= 2) { # s'il y a au moins une donnees nationales ou deux donnees regionales
+          #   return(1) # matrice de presence significative = 1
+          # } else {
+          #   return(0) # matrice de presence significative = 0
+          # }
+          
+          ## Regle V2: matrice de presence significative = 1 s'il y a au moins une donnees NQ ou chiffree
           dst %>%
-            select(., `Type`, `Libellé`, sb) %>%
-            filter(., `Libellé` == fi) -> ext_dst ## extraire des donnees correspondant a la substance sb et l'aliment fi
+            dplyr::select(., `Type`, `Libellé`, sb) %>%
+            dplyr::filter(., `Libellé` == fi) -> ext_dst ## extraire des donnees correspondant a la substance sb et l'aliment fi
           
-          # enlever les lignes avec donnees non quantifiees
-          ext_dst[[sb]] <- suppressWarnings(as.numeric(ext_dst[[sb]])) # conversion string en valeur numerique, si ND/NQ/NR ça devient NA
-          ext_dst <- ext_dst[!is.na(ext_dst[[sb]]), ]
+          # compter le nombre de NQ
+          ndNQ <- sum(ext_dst[[sb]] == "NQ", na.rm = T)
           
-          # compter le nombre de donnees quantifiees nationales et regionales
-          ndq_R <- length(ext_dst$Type[ext_dst$Type == "R"])
-          ndq_N <- length(ext_dst$Type[ext_dst$Type == "N"])
+          # compter le nombre de donnees quantifiees
+          vec_dq <- suppressWarnings(as.numeric(ext_dst[[sb]])) # conversion string en valeur numerique, si ND/NQ/NR ça devient NA
+          vec_dq <- vec_dq[!is.na(vec_dq)] # enlever les NA nouvellement crees
+          ndq <- length(vec_dq)
           
-          if (ndq_N >= 1 || ndq_R >= 2) { # s'il y a au moins une donnees nationales ou deux donnees regionales
+          # regle
+          if (ndNQ >= 1 || ndq >= 1) { # s'il y a au moins une NQ ou au moins une donnee quantifiee
             return(1) # matrice de presence significative = 1
           } else {
             return(0) # matrice de presence significative = 0
@@ -280,7 +303,7 @@ f_eat2_carto_conta <- function(
     subs_table,
     vars,
     frsf,
-    path_rawgraph = "data/raw/FRA_adm1.rds"
+    rds_raw
 ) {
   ## extraction des donnees correspondant au couple selectionne  
   f_eat2_extract_data(d = d,
@@ -317,7 +340,7 @@ f_eat2_carto_conta <- function(
     }
     
     if (length(unique(ext_data$`Région`)) == 1) { ## s'il y a uniquement une region/uniquement nationale
-      plot(readRDS(path_rawgraph))
+      plot(rds_raw)
       
       if (unique(ext_data$`Région`) == 99) { ## plotter des donnees nationales
         plot(st_geometry(frsf_out[frsf_out$NAME_1 != "Corse",]),
@@ -354,7 +377,7 @@ f_eat2_carto_conta <- function(
     }
     
   } else { # sinon, s'il n'y a aucune donnees, plotter la carte vierge
-    plot(readRDS(path_rawgraph))
+    plot(rds_raw)
   }
   
 }
@@ -364,8 +387,127 @@ f_eat2_carto_conta <- function(
 
 
 
+f_eat2_plot_conta_bygrp <- function(
+    d, ## list of data frames
+    subs_input,
+    hyp,
+    food_table, ## data frame with the all the names of food and corresponding food groups
+    subs_table, ## data frame with the all the names of substances and corresponding element of list in d
+    vars
+) {
+  
+  subsgrp <- subs_table$subs_grp[subs_table$subs %in% subs_input]
+  
+  d_sub <- d[[unique(subsgrp)]]
+  
+  d_sub %>%
+    dplyr::filter(., Substance == subs_input) %>%
+    dplyr::select(., c(vars, "Contamination rapportée", hyp)) -> d_sub
+  
+  d_sub[[hyp]] <- as.numeric(d_sub[[hyp]])
+  
+  ## Calcul des moyennes regionales (moyenne des deux vagues) pour l'ensemble des aliments
+  d_sub %>%
+    group_by(`Groupe de la nomenclature INCA 2`, `Libellé`, `Région`, `Unité`) %>%
+    summarise(ContaminationReg = mean(get(hyp), na.rm = TRUE),
+              .groups = 'drop') %>%
+    group_by(`Groupe de la nomenclature INCA 2`, `Libellé`, `Unité`) %>%
+    summarise(ContaminationNatFood = mean(ContaminationReg, na.rm = TRUE),
+              .groups = 'drop') %>%
+    group_by(`Groupe de la nomenclature INCA 2`, `Unité`) %>%
+    summarise(ContaminationNatGrp = mean(ContaminationNatFood, na.rm = TRUE),
+              .groups = 'drop') %>%
+    arrange(., ContaminationNatGrp) %>%
+    rename(., `Groupe d'aliments` = `Groupe de la nomenclature INCA 2`,
+           `Contamination moyenne (nationale)` = `ContaminationNatGrp`) -> d_nat_grp
+  
+  d_nat_grp$`Groupe d'aliments` <- factor(d_nat_grp$`Groupe d'aliments`, levels = unique(d_nat_grp$`Groupe d'aliments`))
+  
+  d_nat_grp %>%
+    mutate(`Contamination moyenne (nationale)` = round(`Contamination moyenne (nationale)`, 4)) -> d_nat_grp
+  
+  g_grp <- ggplot(data = d_nat_grp) +
+    geom_col(fill = "#5770BE",
+             mapping = aes(x = `Groupe d'aliments`,
+                           y = `Contamination moyenne (nationale)`)) +
+    xlab("") + ylab(paste("Substance: ", subs_input,
+                          "\nContamination (", unique(d_nat_grp$`Unité`), ") - Hypothèse ", hyp, sep = "")) +
+    theme(axis.ticks = element_blank(),
+          legend.position = "right",
+          # axis.text.y = element_blank(),
+          axis.text.x = element_text(size=8),
+          plot.title = element_text(face="bold", size=16),
+          panel.background = element_rect(fill="white"),
+          # axis.text = element_text(size=16),
+          panel.grid.major.x = element_line(colour = "lightgray"),
+          panel.grid.minor.x = element_line(colour = "lightgray")
+    ) +
+    coord_flip()
+  
+  plotly::ggplotly(g_grp)
+  
+}
 
 
+f_eat2_plot_conta_byfood <- function(
+    d, ## list of data frames
+    subs_input,
+    food_grp_input, ## food_grp as input
+    hyp,
+    food_table, ## data frame with the all the names of food and corresponding food groups
+    subs_table, ## data frame with the all the names of substances and corresponding element of list in d
+    vars
+) {
+  
+  subsgrp <- subs_table$subs_grp[subs_table$subs %in% subs_input]
+  
+  d_sub <- d[[unique(subsgrp)]]
+  
+  d_sub %>%
+    dplyr::filter(., Substance == subs_input) %>%
+    dplyr::filter(., `Groupe de la nomenclature INCA 2` == food_grp_input) %>%
+    dplyr::select(., c(vars, "Contamination rapportée", hyp)) -> d_sub
+  
+  d_sub[[hyp]] <- as.numeric(d_sub[[hyp]])
+  
+  ## Calcul des moyennes regionales (moyenne des deux vagues) pour l'ensemble des aliments
+  d_sub %>%
+    group_by(`Libellé`, `Région`, `Unité`) %>%
+    summarise(ContaminationReg = mean(get(hyp)),
+              .groups = 'drop') %>%
+    group_by(`Libellé`, `Unité`) %>%
+    summarise(ContaminationNatFood = mean(ContaminationReg),
+              .groups = 'drop') %>%
+    arrange(., ContaminationNatFood) %>%
+    rename(., `Aliments` = `Libellé`,
+           `Contamination moyenne (nationale)` = `ContaminationNatFood`) -> d_nat_food
+  
+  d_nat_food$`Aliments` <- factor(d_nat_food$`Aliments`, levels = unique(d_nat_food$`Aliments`))
+  
+  d_nat_food %>%
+    mutate(`Contamination moyenne (nationale)` = round(`Contamination moyenne (nationale)`, 4)) -> d_nat_food
+  
+  g_food <- ggplot(data = d_nat_food) +
+    geom_col(fill = "#5770BE", alpha = 0.5,
+             mapping = aes(x = `Aliments`,
+                           y = `Contamination moyenne (nationale)`)) +
+    xlab("") + ylab(paste("Substance: ", subs_input,
+                          "\nContamination (", unique(d_nat_food$`Unité`), ") - Hypothèse ", hyp, sep = "")) +
+    theme(axis.ticks = element_blank(),
+          legend.position = "right",
+          # axis.text.y = element_blank(),
+          axis.text.x = element_text(size=8),
+          plot.title = element_text(face="bold", size=16),
+          panel.background = element_rect(fill="white"),
+          # axis.text = element_text(size=16),
+          panel.grid.major.x = element_line(colour = "lightgray"),
+          panel.grid.minor.x = element_line(colour = "lightgray")
+    ) +
+    coord_flip()
+  
+  plotly::ggplotly(g_food)
+  
+}
 
 
 

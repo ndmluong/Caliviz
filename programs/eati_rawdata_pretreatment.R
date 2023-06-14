@@ -93,14 +93,16 @@ rm(df_eati_P_raw, df_eati_nP_raw)
 lapply(food_tab_eati$aliment, function(fi) {
   sapply(subs_tab_eati$substance, function(sb) {
     res <- subset(df_eati, aliment == fi & substance == sb)$type_res
-    if (length(res) < 1) return(NA)
-    else if (length(res) == 1) {
-      if (res == "Non déterminé") return(NA)
-      else if (res == "VAL") return(1)
+    if (length(res) < 1) return(NA) # s'il y a aucune valeur : NA
+    else if (length(res) == 1) { # s'il y a une seule valeur : 
+      if (res == "Non déterminé") return(NA) 
+      # else if (res == "VAL") return(1)
+      else if (res %in% c("VAL", "<LQ")) return(1)
       else return(0)
     }
-    else {
-      if ("VAL" %in% res) return(1)
+    else { # s'il y a plusieur valeurs
+      # if ("VAL" %in% res) return(1)
+      if ("VAL" %in% res || "<LQ" %in% res) return(1)
       else return(0)
       }
   }) %>%
@@ -125,7 +127,7 @@ df_eati$concentration <- as.numeric(df_eati$concentration)
 
 
 # SAVE IMAGE ####
-save.image("data/processed/processed_data_eati.RData")
+save.image("data/processed/processed_data_eati_V2.RData")
 
 
 

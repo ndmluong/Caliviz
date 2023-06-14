@@ -84,9 +84,23 @@ f_eati_order(df = df_eati, subs_input = "E262")
 
 
 
+dc <- df_eat2_censored$`Contaminants inorg et minéraux`
 
 
+f_eat2_plot_conta_bygrp(d = df_eat2_censored,
+                        subs_input = "Cd",
+                        hyp = "LB",
+                        food_table = food_tab_eat2,
+                        subs_table = subs_tab_eat2,
+                        vars = com_var_eat2)
 
+f_eat2_plot_conta_byfood(d = df_eat2_censored,
+                         subs_input = "Cd",
+                         food_grp_input = "Viande",
+                         hyp = "UB",
+                         food_table = food_tab_eat2,
+                         subs_table = subs_tab_eat2,
+                         vars = com_var_eat2)
 
 
 
