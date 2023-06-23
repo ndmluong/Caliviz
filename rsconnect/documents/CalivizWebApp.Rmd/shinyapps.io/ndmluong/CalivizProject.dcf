@@ -5,9 +5,9 @@ account: ndmluong
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 8661984
-bundleId: 7344099
+bundleId: 7381264
 url: https://ndmluong.shinyapps.io/CalivizProject/
-when: 1686738857.72337
-lastSyncTime: 1686738857.7234
+when: 1687549033.46657
+lastSyncTime: 1687549033.46661
 asMultiple: FALSE
 asStatic: FALSE

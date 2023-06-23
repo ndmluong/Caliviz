@@ -600,7 +600,7 @@ f_eat2_plot_contri <- function(
               marker = list(colors = mypiecols),
               name = "Enfants - UB", domain = list(x = c(0.5, 1), y = c(0,0.5)),
               showlegend = F) %>%
-      layout(title = list(text = paste("Substance ", subs_input, sep = ""),
+      layout(title = list(text = paste("Substance: ", subs_input, sep = ""),
                           font = list(family = "Arial",
                                       size = 24, color = "black")),
              annotations = list(text = c("Adultes/LB","Adultes/UB", "Enfants/LB", "Enfants/UB"),

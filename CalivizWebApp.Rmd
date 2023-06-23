@@ -30,7 +30,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 <h4> /!\\ Fusion en cours avec le premier prototype Streamlit du défi Caliviz (Data challenge Green Data for Health) </h4>
 
-<p style="color:#FF9940"> *Dernière mise à jour: le 14 juin 2023 à 12:00* </p>
+<p style="color:#FF9940"> *Dernière mise à jour: le 23 juin 2023 à 21:30* </p>
 
 
 
@@ -250,10 +250,22 @@ L’exposition est calculée pour tous les individus et une exposition moyenne d
 
 Si l’on souhaite connaître la part apportée par chaque groupe d’aliments dans cette quantité de substance ingérée par la population, on parlera de contribution à l’exposition totale. Celle-ci, exprimée en pourcentage, représente la quantité de substance apportée par un groupe d’aliments par rapport à tout le régime alimentaire. La somme des contributions est égale à 100%.
 
-*(en cours de construction, fonctionnalité disponible temporairement sur [le premier prototype Streamlit du projet Caliviz, onglet Aliments contributeurs](https://caliviz.streamlit.app/))*
+*(en cours de construction, toutes les familles de substances ne sont pas intégrées)*
 
 
+```{r ShinyApp_contri, echo=FALSE, message=FALSE, warning=FALSE}
+## User interface ####
+source("R/_ui_contri.R")
 
+## Server ####
+source("R/_server_contri.R")
+
+shinyApp(
+  ui = ui_contri,
+  server = server_contri,
+  options = list(height = 1000, width = 1100)
+)
+```
 
 
 
