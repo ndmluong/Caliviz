@@ -1,6 +1,6 @@
 # RAW DATA PRETREATMENT ####
 load("data/processed/processed_data_eati_V2.RData")
-load("data/processed/processed_data_eat2_V3.RData")
+load("data/processed/processed_data_eat2_V4.RData")
 rds_raw <- readRDS(file = "data/raw/FRA_adm1.rds")
 
 # PACKAGES ####

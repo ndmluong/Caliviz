@@ -110,4 +110,19 @@ df_eat2_censored$`Dioxines, PCB`$`Famille de substances` <- "Dioxines, PCB"
 df_eat2_censored$`Dioxines, PCB` <- subset(df_eat2_censored$`Dioxines, PCB`, Substance != "Lipides (%)" )
 
 
-save.image("data/processed/processed_data_eat2_V3.RData")
+
+# Relative contributions ####
+df_eat2_ctA <- read_excel(path = "data/raw/eat2_contrib_grp.xlsx", sheet = "Adultes")
+df_eat2_ctE <- read_excel(path = "data/raw/eat2_contrib_grp.xlsx", sheet = "Enfants")
+
+df_eat2_ctA <- mutate(df_eat2_ctA, Population = "Adultes", .after = Substance)
+df_eat2_ctE <- mutate(df_eat2_ctE, Population = "Enfants", .after = Substance)
+
+df_eat2_ct <- rbind(df_eat2_ctA, df_eat2_ctE)
+rm(df_eat2_ctA, df_eat2_ctE)
+
+
+
+
+
+save.image("data/processed/processed_data_eat2_V4.RData")

@@ -512,6 +512,152 @@ f_eat2_plot_conta_byfood <- function(
 
 
 
+f_eat2_plot_contri <- function(
+  df, ## data frame (contribution 2 populations)
+  subs_input ## string: name of the substance
+) {
+  
+  df_pie <- subset(df, Substance == subs_input)
+  
+  mypiecols <- viridisLite::turbo(n = 41, alpha = 0.7, begin = 0, end = 0.9, direction = 1)
+  set.seed(408)
+  mypiecols <- sample(mypiecols)
+  
+  if (sum(is.na(df_pie$Contribution_MB)) == 0) { ## si c'est le cas de MB uniquement
+    plot_output <- plotly::plot_ly() %>%
+      add_pie(data = subset(df_pie, Population == "Adultes"),
+              labels = ~ `Groupe d'aliments`,
+              values = ~ `Contribution_MB`, ## MB
+              textposition = "inside",
+              textinfo = 'label',
+              hoverinfo = "label+percent",
+              hole = 0.3,
+              marker = list(colors = mypiecols),
+              name = "Adultes - MB", domain = list(y = c(0.5,1)),
+              showlegend = F) %>%
+      add_pie(data = subset(df_pie, Population == "Enfants"),
+              labels = ~ `Groupe d'aliments`,
+              values = ~ `Contribution_MB`, ## MB
+              textposition = "inside",
+              textinfo = 'label',
+              hoverinfo = "label+percent",
+              hole = 0.3,
+              marker = list(colors = mypiecols),
+              name = "Enfants - MB", domain = list(y = c(0,0.5)),
+              showlegend = F) %>%
+      layout(title = list(text = paste("Substance: ", subs_input, sep = ""),
+                          font = list(family = "Arial",
+                                      size = 24, color = "black")),
+             annotations = list(text = c("Adultes/MB", "Enfants/MB"),
+                                font = list(family = "Arial",
+                                            size = 14, color = "black"),
+                                xref = "paper", yref = "paper",
+                                yanchor = "top", xanchor = "center",
+                                align = "center",
+                                x = c(0.5, 0.5),
+                                y = c(0.76, 0.26),
+                                showarrow = F),
+             margin = list(l = 10, r = 10, b = 10, t = 80, pad = 4))
+  } else {
+    plot_output <- plotly::plot_ly() %>%
+      add_pie(data = subset(df_pie, Population == "Adultes"),
+              labels = ~ `Groupe d'aliments`,
+              values = ~ `Contribution_LB`,
+              textposition = "inside",
+              textinfo = 'label',
+              hoverinfo = "label+percent",
+              hole = 0.3,
+              marker = list(colors = mypiecols),
+              name = "Adultes - LB", domain = list(x = c(0,0.5), y = c(0.5,1)),
+              showlegend = F) %>%
+      add_pie(data = subset(df_pie, Population == "Adultes"),
+              labels = ~ `Groupe d'aliments`,
+              values = ~ `Contribution_UB`,
+              textposition = "inside",
+              textinfo = 'label',
+              hoverinfo = "label+percent",
+              hole = 0.3,
+              marker = list(colors = mypiecols),
+              name = "Adultes - UB", domain = list(x = c(0.5, 1), y = c(0.5,1)),
+              showlegend = F) %>%
+      add_pie(data = subset(df_pie, Population == "Enfants"),
+              labels = ~ `Groupe d'aliments`,
+              values = ~ `Contribution_LB`,
+              textposition = "inside",
+              textinfo = 'label',
+              hoverinfo = "label+percent",
+              hole = 0.3,
+              marker = list(colors = mypiecols),
+              name = "Enfants - LB", domain = list(x = c(0, 0.5), y = c(0,0.5)),
+              showlegend = F) %>%
+      add_pie(data = subset(df_pie, Population == "Enfants"),
+              labels = ~ `Groupe d'aliments`,
+              values = ~ `Contribution_UB`,
+              textposition = "inside",
+              textinfo = 'label',
+              hoverinfo = "label+percent",
+              hole = 0.3,
+              marker = list(colors = mypiecols),
+              name = "Enfants - UB", domain = list(x = c(0.5, 1), y = c(0,0.5)),
+              showlegend = F) %>%
+      layout(title = list(text = paste("Substance ", subs_input, sep = ""),
+                          font = list(family = "Arial",
+                                      size = 24, color = "black")),
+             annotations = list(text = c("Adultes/LB","Adultes/UB", "Enfants/LB", "Enfants/UB"),
+                                font = list(family = "Arial",
+                                            size = 14, color = "black"),
+                                xref = "paper", yref = "paper",
+                                yanchor = "top", xanchor = "center",
+                                align = "center",
+                                x = c(.25, .75, .25, .75),
+                                y = c(.76, .76, .26, .26),
+                                showarrow = F),
+             margin = list(l = 10, r = 10, b = 10, t = 80, pad = 4))
+  }
+  
+  return(plot_output)
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
