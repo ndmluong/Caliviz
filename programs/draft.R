@@ -135,3 +135,84 @@ f_eat2_plot_contri(df = df_eat2_ct, subs_input = "Mercure")
 f_eat2_plot_contri(df = df_eat2_ct, subs_input = "Plomb")
 f_eat2_plot_contri(df = df_eat2_ct, subs_input = "Calcium")
 
+
+f_eat2_plot_contri_bar <- function(
+  df, ## data frame (contribution 2 populations with the column "Hypothesis" (expanded table))
+  subs_input,
+  hyp_input
+) {
+  
+  ## Adultes 
+  df %>%
+    dplyr::filter(., Substance == subs_input, Hypothesis == hyp_input, Population == "Adultes") %>%
+    dplyr::arrange(., Contribution) -> subdf_A
+  
+  subdf_A$`Groupe d'aliments` <- factor(subdf_A$`Groupe d'aliments`, levels = unique(subdf_A$`Groupe d'aliments`))
+  
+  if (sum(is.na(subdf_A$`Contribution`)) == 0) {
+    g_A <- ggplot(data = subdf_A,
+                  mapping = aes(x = `Groupe d'aliments`, y = `Contribution`)) +
+      geom_col(fill = "#FF9940", alpha = 0.7) +
+      geom_text(aes(label = paste(`Groupe d'aliments`, " (", round(`Contribution`, 2), "%)", sep = "")),
+                y = 0, size = 3, hjust = 0) +
+      xlab("") + ylab("") + labs(title = "Population: Adultes") +
+      theme(axis.ticks = element_blank(),
+            legend.position = "right",
+            axis.text.y = element_blank(),
+            axis.text.x = element_text(size=8),
+            plot.title = element_text(face="bold", size=12),
+            panel.background = element_rect(fill="white"),
+            axis.text = element_text(size=16),
+            panel.grid.major.x = element_line(colour = "lightgray"),
+            panel.grid.minor.x = element_line(colour = "lightgray")
+      ) +
+      coord_flip()
+  }
+  
+  ## Enfants 
+  df %>%
+    dplyr::filter(., Substance == subs_input, Hypothesis == hyp_input, Population == "Enfants") %>%
+    dplyr::arrange(., Contribution) -> subdf_E
+  
+  subdf_E$`Groupe d'aliments` <- factor(subdf_E$`Groupe d'aliments`, levels = unique(subdf_E$`Groupe d'aliments`))
+  
+  if (sum(is.na(subdf_E$`Contribution`)) == 0) {
+    g_E <- ggplot(data = subdf_E,
+                  mapping = aes(x = `Groupe d'aliments`, y = `Contribution`)) +
+      geom_col(fill = "#00AC8C", alpha = 0.7) +
+      geom_text(aes(label = paste(`Groupe d'aliments`, " (", round(`Contribution`, 2), "%)", sep = "")),
+                y = 0, size = 3, hjust = 0) +
+      xlab("") + ylab("") + labs(title = "Population: Enfants") +
+      theme(axis.ticks = element_blank(),
+            legend.position = "right",
+            axis.text.y = element_blank(),
+            axis.text.x = element_text(size=8),
+            plot.title = element_text(face="bold", size=12),
+            panel.background = element_rect(fill="white"),
+            axis.text = element_text(size=16),
+            panel.grid.major.x = element_line(colour = "lightgray"),
+            panel.grid.minor.x = element_line(colour = "lightgray")
+      ) +
+      coord_flip()
+  }
+  
+  if (sum(is.na(subdf_E$`Contribution`)) > 0) {
+    ggplot() +
+      theme(axis.title = element_blank(),
+            panel.background = element_rect(fill="white")) +
+      labs(subtitle = ">>> Les contributions relatives n'ont pas été estimées pour l'hypothèse sélectionnée")
+  } else {
+    gridExtra::grid.arrange(g_A, g_E, nrow = 1,
+                            top = paste("Substance: ", subs_input, " - Hypothèse: ", hyp_input, sep =""),
+                            left = "Groupe d'aliments",
+                            bottom = "Contribution (%)")
+  }
+  
+}
+
+f_eat2_plot_contri_bar(df = df_eat2_ct_expanded, subs_input = "Cadmium", hyp_input = "LB")
+f_eat2_plot_contri_bar(df = df_eat2_ct_expanded, subs_input = "Cadmium", hyp_input = "MB")
+f_eat2_plot_contri_bar(df = df_eat2_ct_expanded, subs_input = "Cadmium", hyp_input = "UB")
+
+f_eat2_plot_contri_bar(df = df_eat2_ct_expanded, subs_input = "Arsenic inorganique", hyp_input = "UB")
+f_eat2_plot_contri_bar(df = df_eat2_ct_expanded, subs_input = "Arsenic inorganique", hyp_input = "MB")

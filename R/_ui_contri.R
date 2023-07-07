@@ -16,20 +16,32 @@ ui_contri <- fluidPage(
   navbarPage(
     "Données",
     tabPanel("EAT2",
+             fluidRow(
+               column(6, selectInput("eat2_single_subs_contri", "Choisir une substance",
+                                     # tapply(subs_tab_eat2$subs, subs_tab_eat2$subs_grp, function(x) x),
+                                     unique(df_eat2_ct$Substance),
+                                     selected = "Argent",
+                                     multiple = FALSE))
+             ),
+             
              tabsetPanel(
-               # tabPanel("Aliments contributeurs",
+               tabPanel("Pie chart",
                         fluidRow(
-                          column(6, selectInput("eat2_single_subs_contri", "Choisir une substance",
-                                                # tapply(subs_tab_eat2$subs, subs_tab_eat2$subs_grp, function(x) x),
-                                                unique(df_eat2_ct$Substance),
-                                                selected = "Argent",
-                                                multiple = FALSE))
-                        ),
-                        fluidRow(
-                          column(12, plotlyOutput("eat2_contri", height = "800px", width = "900px"))
+                          column(12, plotlyOutput("eat2_contri_pie", height = "800px", width = "900px"))
                         )
-               # ) # end tabPanel "Aliments contributeurs"
+               ) # end tabPanel "Pie chart"
+               ,
+               tabPanel("Bar plot",
+                        radioButtons("eat2_contri_bar_hyp", label = "Hypothèse de censure",
+                                     choices = c("Hypothèse basse (LB)" = "LB",
+                                                 "Hypothèse moyenne (MB)" = "MB",
+                                                 "Hypothèse haute (UB)" = "UB"),
+                                     selected = "LB"),
+                        fluidRow(
+                          column(12, plotOutput("eat2_contri_bar", height = "750px", width = "900px"))
+                        )
+               )
              ), # end tabsetPanel       
-    width = 2), # end tabPanel "panel_eat2"
+             width = 2), # end tabPanel "panel_eat2"
   ) # end navBar
 )

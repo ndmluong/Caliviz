@@ -34,7 +34,7 @@ f_eati_order <- function(
   ## Aliments courants 
   g1 <- ggplot(data = subdf_common,
                mapping = aes(x = aliment, y = concentration)) +
-    geom_col(fill = "darkorange", alpha = 0.5) +
+    geom_col(fill = "#FF9940", alpha = 0.5) +
     geom_text(aes(label = paste(aliment, " (", round(concentration, 3), ")", sep = "")),
               y = 0, size = 3, hjust = 0) +
     xlab("Aliments") + ylab(paste("Concentration (", unique(subdf_common$unite), ")", sep = "")) +
@@ -60,7 +60,7 @@ f_eati_order <- function(
   ## Aliments infantiles
   g2 <- ggplot(data = subdf_infantile,
                mapping = aes(x = aliment, y = concentration)) +
-    geom_col(fill = "darkgreen", alpha = 0.5) +
+    geom_col(fill = "#00AC8C", alpha = 0.5) +
     geom_text(aes(label = paste(aliment, " (", round(concentration, 3), ")", sep = "")),
               y = 0, size = 3, hjust = 0) +
     xlab("Aliments") + ylab(paste("Concentration (", unique(subdf_common$unite), ")", sep = "")) +
@@ -85,3 +85,7 @@ f_eati_order <- function(
   
   ggpubr::ggarrange(g1, g2)
 }
+
+
+
+

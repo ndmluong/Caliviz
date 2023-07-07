@@ -28,7 +28,7 @@ knitr::opts_chunk$set(echo = TRUE)
 <p style="color:#00AC8C">**Membres du groupe Caliviz**: </p>
 <p style="color:#00AC8C">Cindy Sotton, Louis Staquet, Caroline Beltran, Julie Neble, Emilie Thiard, Laurence Leon, Ngoc-Du Martin Luong et Nawel Bemrah </p> 
 
-<p style="color:#FF9940"> *Dernière mise à jour: le 7 juillet 2023 à 12:00* </p>
+<p style="color:#FF9940"> *Dernière mise à jour: le 7 juillet 2023 à 18:00* </p>
 
 
 

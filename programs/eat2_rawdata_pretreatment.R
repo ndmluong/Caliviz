@@ -112,6 +112,7 @@ df_eat2_censored$`Dioxines, PCB` <- subset(df_eat2_censored$`Dioxines, PCB`, Sub
 
 
 # Relative contributions ####
+## Populations ####
 df_eat2_ctA <- read_excel(path = "data/raw/eat2_contrib_grp.xlsx", sheet = "Adultes")
 df_eat2_ctE <- read_excel(path = "data/raw/eat2_contrib_grp.xlsx", sheet = "Enfants")
 
@@ -121,7 +122,20 @@ df_eat2_ctE <- mutate(df_eat2_ctE, Population = "Enfants", .after = Substance)
 df_eat2_ct <- rbind(df_eat2_ctA, df_eat2_ctE)
 rm(df_eat2_ctA, df_eat2_ctE)
 
-
+## Expanding table with 3 hypotheses ####
+rbind(
+  dplyr::select(mutate(df_eat2_ct,
+                       Hypothesis = "LB", Contribution = round(Contribution_LB, 2)),
+                `Groupe d'aliments`, `Famille`, `Substance`, `Population`, `Hypothesis`, `Contribution`),
+  
+  dplyr::select(mutate(df_eat2_ct,
+                       Hypothesis = "MB", Contribution = round(Contribution_MB, 2)),
+                `Groupe d'aliments`, `Famille`, `Substance`, `Population`, `Hypothesis`, `Contribution`),
+  
+  dplyr::select(mutate(df_eat2_ct,
+                       Hypothesis = "UB", Contribution = round(Contribution_UB, 2)),
+                `Groupe d'aliments`, `Famille`, `Substance`, `Population`, `Hypothesis`, `Contribution`)
+) -> df_eat2_ct_expanded
 
 
 
