@@ -28,9 +28,7 @@ knitr::opts_chunk$set(echo = TRUE)
 <p style="color:#00AC8C">**Membres du groupe Caliviz**: </p>
 <p style="color:#00AC8C">Cindy Sotton, Louis Staquet, Caroline Beltran, Julie Neble, Emilie Thiard, Laurence Leon, Ngoc-Du Martin Luong et Nawel Bemrah </p> 
 
-<h4> /!\\ Fusion en cours avec le premier prototype Streamlit du défi Caliviz (Data challenge Green Data for Health) </h4>
-
-<p style="color:#FF9940"> *Dernière mise à jour: le 23 juin 2023 à 21:30* </p>
+<p style="color:#FF9940"> *Dernière mise à jour: le 7 juillet 2023 à 12:00* </p>
 
 
 
@@ -71,7 +69,7 @@ d_subs_pres <- read_excel(path = "data/raw/Caliviz_PresentationSubstances.xlsx",
 
 inputPanel(
   selectInput("eat2_fam_sub_pres", label = "Substance",
-              choices = tapply(d_subs_pres$`Substance`, d_subs_pres$`Famille`, function(x) x))
+              choices = tapply(d_subs_pres$`Substance_nom`, d_subs_pres$`Famille`, function(x) x))
 )
 
 ```
@@ -79,25 +77,25 @@ inputPanel(
 ## Résumé
 
 ```{r echo=FALSE}
-renderText({ d_subs_pres$Abstract[d_subs_pres$Substance == input$eat2_fam_sub_pres] })
+renderUI({ HTML(d_subs_pres$Abstract[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) })
 ```
 
 ## Informations détaillées
 
 ```{r echo=FALSE}
-renderText({ d_subs_pres$GeneralInfo[d_subs_pres$Substance == input$eat2_fam_sub_pres]})
+renderUI({ HTML(d_subs_pres$GeneralInfo[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) })
 ```
 
 <h3> Caractérisation du danger </h3>
 
 ```{r echo=FALSE}
-renderText({ d_subs_pres$Hazards[d_subs_pres$Substance == input$eat2_fam_sub_pres] })
+renderUI({ HTML(d_subs_pres$Hazards[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) })
 ```
 
 <h3> Evaluation et caractérisation du risque </h3>
 
 ```{r echo=FALSE}
-renderText({ d_subs_pres$Risks[d_subs_pres$Substance == input$eat2_fam_sub_pres] })
+renderUI({ HTML(d_subs_pres$Risks[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) })
 ```
 
 <h3> Synthèse des conclusions de l'étude EAT2 </h3>
@@ -105,19 +103,19 @@ renderText({ d_subs_pres$Risks[d_subs_pres$Substance == input$eat2_fam_sub_pres]
 <h4> Risques toxicologiques </h4>
   
 ```{r echo=FALSE}
-renderText({ d_subs_pres$ToxicoRisk_EAT2[d_subs_pres$Substance == input$eat2_fam_sub_pres] })
+renderUI({ HTML(d_subs_pres$ToxicoRisk_EAT2[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) })
 ```
 
 <h4> Risques nutritionnels </h4>
 
 ```{r echo=FALSE}
-renderText({ d_subs_pres$NutriRisk_EAT2[d_subs_pres$Substance == input$eat2_fam_sub_pres] })
+renderUI({ HTML(d_subs_pres$NutriRisk_EAT2[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) })
 ```
 
 <h4> Actions et besoin de recherche </h4>
 
 ```{r echo=FALSE}
-renderText({ d_subs_pres$Actions_EAT2[d_subs_pres$Substance == input$eat2_fam_sub_pres] })
+renderUI({ HTML(d_subs_pres$Actions_EAT2[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) })
 ```
 
 
