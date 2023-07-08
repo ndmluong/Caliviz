@@ -1,0 +1,43 @@
+body {
+  max-width: 1400px;
+  margin: auto;
+  text-align: justify;
+  background-color: #FFFFFF;
+}
+
+.list-group-item.active, .list-group-item.active:focus, .list-group-item.active:hover {
+    z-index: 2;
+    color: #fff;
+    background-color: #5770BE;
+    border-color: #5770BE;
+}
+
+
+h1.title{
+  color: #E1000F;
+}
+
+h1 {
+  color: #E1000F;
+  font-size:40px;
+}
+
+h2 {
+  color: #5770BE;
+  font-size:36px;
+}
+
+h3 {
+  color: #00AC8C;
+  font-size:28px;
+}
+
+h5 {
+  color: #00AC8C;
+  font-size:28px;
+}
+
+h6 {
+  color: #5770BE;
+  font-size:22px;
+}

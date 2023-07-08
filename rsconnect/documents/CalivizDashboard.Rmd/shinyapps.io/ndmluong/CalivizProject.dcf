@@ -1,0 +1,13 @@
+name: CalivizProject
+title: CalivizProject
+username:
+account: ndmluong
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 8661984
+bundleId: 7433613
+url: https://ndmluong.shinyapps.io/CalivizProject/
+when: 1688788642.20199
+lastSyncTime: 1688788642.20201
+asMultiple: TRUE
+asStatic: FALSE

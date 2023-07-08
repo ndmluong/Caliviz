@@ -38,7 +38,7 @@ ui_contri <- fluidPage(
                                                  "Hypothèse haute (UB)" = "UB"),
                                      selected = "LB"),
                         fluidRow(
-                          column(12, plotOutput("eat2_contri_bar", height = "750px", width = "900px"))
+                          column(12, plotOutput("eat2_contri_bar", height = "800px", width = "1200px"))
                         )
                )
              ), # end tabsetPanel       
