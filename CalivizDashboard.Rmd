@@ -18,15 +18,15 @@ runtime: shiny
 ```
 # Accueil
 
-<h1>Caliviz - Outil interactif permettant la visualisation des substances chimiques auxquelles est exposée la population française via son alimentation</h1>
+<h1> <center> Caliviz - Outil interactif permettant la visualisation des substances chimiques auxquelles est exposée la population française via son alimentation </center> </h1>
 
 ```{r webappheader, echo = F, out.width = '100%'}
-knitr::include_graphics("www/fig/caliviz_bande.jpg")
+knitr::include_graphics("www/fig/caliviz_dashboardheader.png")
 ```
 
 <p style="color:#5770BE"> **Membres du groupe Caliviz**: </p> <p style="color:#5770BE"> Cindy Sotton, Louis Staquet, Caroline Beltran, Julie Neble, Emilie Thiard, Laurence Leon, Ngoc-Du Martin Luong et Nawel Bemrah </p> 
 
-<p style="color:#FF9940">*Dernière mise à jour: le 8 juillet 2023 à 6:00*</p>
+<p style="color:#FF9940">*Dernière mise à jour: le 10 juillet 2023 à 11:00*</p>
 
 
 
@@ -43,11 +43,12 @@ Selon les résultats de la dernière édition de l'étude de l'alimentation tota
 
 <h3>Les études EAT</h3>
 
-L'Anses a pour mission de contribuer à assurer la sécurité sanitaire dans les domaines de l'alimentation, de l'environnement et du travail. Dans ce cadre, elle a lancé en 2006 sa deuxième étude de l'alimentation totale (EAT 2), ayant pour objectifs d'une part de décrire les expositions alimentaires de la population française à des substances d'intérêt en termes de santé publique, d'autre part de caractériser les risques sanitaires liés à l'alimentation et associés à ces substances [...] [Lire la suite de l'article](https://www.anses.fr/fr/content/%C3%A9tude-de-l%E2%80%99alimentation-totale-eat-2-l%E2%80%99anses-met-%C3%A0-disposition-les-donn%C3%A9es-de-son-analyse)
+L'Anses a pour mission de contribuer à assurer la sécurité sanitaire dans les domaines de l'alimentation, de l'environnement et du travail. Dans ce cadre, elle a lancé en 2006 sa deuxième étude de l'alimentation totale (EAT 2), ayant pour objectifs d'une part de décrire les expositions alimentaires de la population française à des substances d'intérêt en termes de santé publique, d'autre part de caractériser les risques sanitaires liés à l'alimentation et associés à ces substances [...]
+<a href="https://www.anses.fr/fr/content/%C3%A9tude-de-l%E2%80%99alimentation-totale-eat-2-l%E2%80%99anses-met-%C3%A0-disposition-les-donn%C3%A9es-de-son-analyse" target="_blank">Lire la suite de l'article</a>
 
 # Présentation des substances
 
-Cet onglet permet aux utilisateurs d'obtenir, de mnaière interactive avec le menu déroulant ci-dessous, les informations relatives aux substances ou familles de substances analysées dans l'étude EAT2 et synthétisées à partir des rapports scientifiques de cette dernière.
+*Cet onglet permet aux utilisateurs d'obtenir, de manière interactive avec le menu déroulant ci-dessous, les informations relatives aux substances ou familles de substances analysées dans l'étude EAT2 et synthétisées à partir des rapports scientifiques de l'étude.*
 
 ```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
 source("R/packages.R")
@@ -237,11 +238,13 @@ shinyApp(
 
 Les données intégrées dans cet outil de visualisation sont issues de l'étude de l'alimentation totale (EAT2) menée par l'Anses et publiée en 2014. Ces données sont accessibles sur data.gouv:
 
--   [Données issues de l'étude EAT2 (Anses, 2014)](https://www.data.gouv.fr/fr/datasets/donnees-regionales-eat2-etude-de-l-alimentation-totale/)
+- <a href="https://www.data.gouv.fr/fr/datasets/donnees-regionales-eat2-etude-de-l-alimentation-totale/" target="_blank">Données issues de l'étude EAT2 (Anses, 2014)</a>
 
--   [Données relatives aux niveaux de concentration en BPA des différents aliments issus de l'étude EAT2 (Anses, 2013)](https://www.data.gouv.fr/fr/datasets/bisphenol-a/)
+- <a href="https://www.data.gouv.fr/fr/datasets/bisphenol-a/" target="_blank">Données relatives aux niveaux de concentration en BPA des différents aliments issus de l'étude EAT2 (Anses, 2013)</a>
 
--   [Données issues de l'étude de l'Alimentation Totale infantile EATi (Anses, 2018)](https://www.data.gouv.fr/fr/datasets/donnees-etude-de-lalimentation-totale-infantile/)
+- <a href="https://www.data.gouv.fr/fr/datasets/donnees-etude-de-lalimentation-totale-infantile/" target="_blank">Données issues de l'étude de l'Alimentation Totale infantile EATi (Anses, 2018)</a>
+
+
 
 <h3>Pré-traitement des données</h3>
 
@@ -267,6 +270,7 @@ La première étape du projet Caliviz a consisté à traiter les données infér
 
 <h3>Ressources</h3>
 
-[Gitlab](https://gitlab.com/data-challenge-gd4h/caliviz/)
+- <a href="https://gitlab.com/data-challenge-gd4h/caliviz/" target="_blank">Gitlab</a> du premier protoype Caliviz (Streamlit) développé dans le cadre du défi Green Data for Health.
+
 
 
