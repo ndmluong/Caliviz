@@ -138,5 +138,9 @@ rbind(
 ) -> df_eat2_ct_expanded
 
 
+df_eat2_ct_expanded %>%
+  dplyr::select(Famille, Substance) %>%
+  unique() -> subs_tab_eat2_ct
+
 
 save.image("data/processed/processed_data_eat2_V5.RData")

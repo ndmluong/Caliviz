@@ -18,8 +18,8 @@ ui_contri <- fluidPage(
     tabPanel("EAT2",
              fluidRow(
                column(6, selectInput("eat2_single_subs_contri", "Choisir une substance",
-                                     # tapply(subs_tab_eat2$subs, subs_tab_eat2$subs_grp, function(x) x),
-                                     unique(df_eat2_ct$Substance),
+                                     tapply(subs_tab_eat2_ct$Substance, subs_tab_eat2_ct$Famille, function(x) x),
+                                     # unique(df_eat2_ct$Substance),
                                      selected = "Argent",
                                      multiple = FALSE))
              ),
