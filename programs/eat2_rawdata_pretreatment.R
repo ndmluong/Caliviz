@@ -52,6 +52,7 @@ lapply(df_eat2_raw, function(x) {
 
 
 # Food list ####
+## Extracting the raw food list #### 
 food_tab_eat2 <- data.frame(food_grp = character(), food = character())
 for (x in 1:length(df_eat2)) {
   food_tab_eat2 <- rbind(food_tab_eat2,
@@ -62,6 +63,36 @@ for (x in 1:length(df_eat2)) {
 food_tab_eat2 <- food_tab_eat2[!duplicated(food_tab_eat2), ]
 food_tab_eat2 <- arrange(food_tab_eat2, food_grp)
 rm(x)
+
+## Remove duplicates in food item names ####
+# exporting the raw food list and check for duplicates on file
+# openxlsx::write.xlsx(x = arrange(food_tab_eat2, food_grp, food), file = "data/raw/food_tabs_eat2_raw.xlsx", sheetName = "raw", overwrite = FALSE)
+
+# extracting the list of duplicates
+food_item_duplicate <- read_excel(path = "data/raw/food_tabs_eat2_replacement.xlsx", sheet = "replace")
+
+# remove duplicates (find and replace)
+lapply(df_eat2, function(st) {
+  for (j in 1:nrow(food_item_duplicate)) {
+    st$`Libellé`[st$`Libellé` == food_item_duplicate$food[j]] <- food_item_duplicate$replace[j]
+  }
+  return(st)
+}) -> df_eat2
+
+# extract the new list of food items
+food_tab_eat2 <- data.frame(food_grp = character(), food = character())
+for (x in 1:length(df_eat2)) {
+  food_tab_eat2 <- rbind(food_tab_eat2,
+                         data.frame(food_grp = df_eat2[[x]]$`Groupe de la nomenclature INCA 2`,
+                                    food = df_eat2[[x]]$`Libellé`))
+}
+
+food_tab_eat2 <- food_tab_eat2[!duplicated(food_tab_eat2), ]
+food_tab_eat2 <- arrange(food_tab_eat2, food_grp)
+rm(x)
+
+
+
 
 # Check: Significative presence of substances in food ####
 f_eat2_check_by_food(d = df_eat2,
@@ -97,9 +128,9 @@ df_eat2_censored <- list(`Acrylamide` = read.csv(file = "data/processed/Acrylami
                          `Contaminants inorg et minéraux` = read.csv(file = "data/processed/Contaminants inorg et minéraux.csv", header = TRUE),
                          # `Phytoestrogènes` = read.csv(file = "data/processed/Acrylamide.csv", header = TRUE),
                          # `Mycotoxines` = read.csv(file = "data/processed/Acrylamide.csv", header = TRUE),
-                         `Additifs` = read.csv(file = "data/processed/Acrylamide.csv", header = TRUE),
+                         `Additifs` = read.csv(file = "data/processed/Additifs.csv", header = TRUE),
                          # `BPA` = read.csv(file = "data/processed/Acrylamide.csv", header = TRUE),
-                         `Pesticides` = read.csv(file = "data/processed/Acrylamide.csv", header = TRUE))
+                         `Pesticides` = read.csv(file = "data/processed/Pesticides.csv", header = TRUE))
 
 lapply(df_eat2_censored, function(x) {
   colnames(x) <- chartr(".", " ", colnames(x))
@@ -108,6 +139,14 @@ lapply(df_eat2_censored, function(x) {
 
 df_eat2_censored$`Dioxines, PCB`$`Famille de substances` <- "Dioxines, PCB"
 df_eat2_censored$`Dioxines, PCB` <- subset(df_eat2_censored$`Dioxines, PCB`, Substance != "Lipides (%)" )
+
+# remove duplicates
+lapply(df_eat2_censored, function(st) {
+  for (j in 1:nrow(food_item_duplicate)) {
+    st$`Libellé`[st$`Libellé` == food_item_duplicate$food[j]] <- food_item_duplicate$replace[j]
+  }
+  return(st)
+}) -> df_eat2_censored
 
 
 
@@ -143,4 +182,4 @@ df_eat2_ct_expanded %>%
   unique() -> subs_tab_eat2_ct
 
 
-save.image("data/processed/processed_data_eat2_V5.RData")
+save.image("data/processed/processed_data_eat2_V6.RData")
