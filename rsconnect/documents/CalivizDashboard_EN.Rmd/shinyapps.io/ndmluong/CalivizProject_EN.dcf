@@ -1,0 +1,12 @@
+name: CalivizProject_EN
+title: CalivizProject_EN
+username: ndmluong
+account: ndmluong
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 9922436
+bundleId: 7704316
+url: https://ndmluong.shinyapps.io/CalivizProject_EN/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE
