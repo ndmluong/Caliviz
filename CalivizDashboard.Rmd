@@ -22,6 +22,7 @@ runtime: shiny
 
 ```{r webappheader, echo = F, out.width = '100%'}
 knitr::include_graphics("www/fig/caliviz_dashboardheader.png")
+app_lang <<- "FR"
 ```
 
 <p style="color:#5770BE"> **Membres du groupe Caliviz**: </p> <p style="color:#5770BE"> Cindy Sotton, Louis Staquet, Caroline Beltran, Julie Neble, Emilie Thiard, Laurence Leon, Ngoc-Du Martin Luong et Nawel Bemrah </p> 

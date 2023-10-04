@@ -9,7 +9,8 @@ server_conta <- function(input, output) {
                             hyp = input$eat2_conta_hyp,
                             food_table = food_tab_eat2,
                             subs_table = subs_tab_eat2,
-                            vars = com_var_eat2)
+                            vars = com_var_eat2,
+                            lang = app_lang) ## app_lang initialized as global variable at the beginning of the dashboard
   })
   output$eat2_show_conta_bygrp <- renderPlotly({
     do_eat2_show_conta_bygrp()
@@ -23,7 +24,8 @@ server_conta <- function(input, output) {
                              hyp = input$eat2_conta_hyp,
                              food_table = food_tab_eat2,
                              subs_table = subs_tab_eat2,
-                             vars = com_var_eat2)
+                             vars = com_var_eat2,
+                             lang = app_lang) ## app_lang initialized as global variable at the beginning of the dashboard
   })
   output$eat2_show_conta_byfood <- renderPlotly({
     do_eat2_show_conta_byfood()

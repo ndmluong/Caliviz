@@ -11,8 +11,16 @@ server_carto <- function(input, output) {
                         subs_table = subs_tab_eat2,
                         vars = com_var_eat2) %>%
       dplyr::select(., -c("Groupe de la nomenclature INCA 2", "Unité")) %>%
-      dplyr::arrange(., `Type`, `Région`, `Vague`, `Date`)
+      dplyr::arrange(., `Type`, `Région`, `Vague`, `Date`) -> extracted_d
     
+    ## Translating column names
+    if (app_lang == "EN") { 
+      extracted_d %>%
+        dplyr::rename(`Food item` = `Libellé`,
+                      `Region` = `Région`,
+                      `Campaign` = `Vague`) -> extracted_d
+    }
+    extracted_d
   })
   output$eat2_extracted_data <- renderDataTable({
     do_eat2_extract_data()
@@ -27,7 +35,8 @@ server_carto <- function(input, output) {
                        subs_table = subs_tab_eat2,
                        vars = com_var_eat2,
                        frsf = sf_FRA1,
-                       rds_raw = raw_rds_FRA1)
+                       rds_raw = raw_rds_FRA1,
+                       lang = app_lang) ## app_lang initialized as global variable at the beginning of the dashboard
   })
   
   output$eat2_carto_conta <- renderPlot({

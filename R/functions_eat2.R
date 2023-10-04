@@ -279,7 +279,8 @@ f_eat2_extract_data <- function(
   subs_input,
   food_table, ## data frame with the all the names of food and corresponding food groups
   subs_table, ## data frame with the all the names of substances and corresponding element of list in d
-  vars ## additional variables to extract (ex. food names, food groups names, regions, year...)
+  vars, ## additional variables to extract (ex. food names, food groups names, regions, year...)
+  lang = "FR"
 ) {
   
   subsgrp <- subs_table$subs_grp[subs_table$subs %in% subs_input]
@@ -303,7 +304,8 @@ f_eat2_carto_conta <- function(
     subs_table,
     vars,
     frsf,
-    rds_raw
+    rds_raw,
+    lang = "FR"
 ) {
   ## extraction des donnees correspondant au couple selectionne  
   f_eat2_extract_data(d = d,
@@ -345,10 +347,17 @@ f_eat2_carto_conta <- function(
       if (unique(ext_data$`Région`) == 99) { ## plotter des donnees nationales
         plot(st_geometry(frsf_out[frsf_out$NAME_1 != "Corse",]),
              border = "navyblue",lwd=2,legend=T, add=T)
-        legendN <- paste("Aliment: ", food_input, " --- ",
-                         "Substance: ", subs_input, "\n",
-                         "Moyenne nationale: ", mean(subset(ext_data, Type == "N")[, subs_input]), " (", unique(ext_data$`Unité`), ")",
-                         sep = "")
+        
+        legendN <- ifelse(lang == "FR",
+                          paste("Aliment: ", food_input, " --- ",
+                                "Substance: ", subs_input, "\n",
+                                "Moyenne nationale: ", mean(subset(ext_data, Type == "N")[, subs_input]), " (", unique(ext_data$`Unité`), ")",
+                                sep = ""),
+                          paste("Food item: ", food_input, " --- ",
+                                "Substance: ", subs_input, "\n",
+                                "Average contamination (national): ", mean(subset(ext_data, Type == "N")[, subs_input]), " (", unique(ext_data$`Unité`), ")",
+                                sep = ""))
+           
         legend("bottomleft", legend = legendN, lwd = 2, col = "navyblue", bty = "n", cex = 0.8)
         
       } else { ## plotter des donnees regionales
@@ -356,10 +365,17 @@ f_eat2_carto_conta <- function(
         region_ID <- reg_code$ID_1[reg_code$EAT2_Region == unique(ext_data$`Région`)]
         plot(st_geometry(frsf_out[frsf_out$ID_1 %in% region_ID,]),
              border = "darkred",lwd = 3, legend=T, add=T)
-        legendR <- paste("Aliment: ", food_input, " --- ",
-                         "Substance: ", subs_input, "\n",
-                         "Moyenne régionale: ", mean(subset(ext_data, Type == "R")[, subs_input]), " (", unique(ext_data$`Unité`), ")",
-                         sep = "")
+        
+        legendR <- ifelse(lang == "FR",
+                          paste("Aliment: ", food_input, " --- ",
+                                "Substance: ", subs_input, "\n",
+                                "Moyenne régionale: ", mean(subset(ext_data, Type == "R")[, subs_input]), " (", unique(ext_data$`Unité`), ")",
+                                sep = ""),
+                          paste("Food item: ", food_input, " --- ",
+                                "Substance: ", subs_input, "\n",
+                                "Average contamination (regional): ", mean(subset(ext_data, Type == "R")[, subs_input]), " (", unique(ext_data$`Unité`), ")",
+                                sep = ""))
+          
         legend("bottomleft", legend = legendR, lwd = 3, col = "darkred", bty = "n", cex = 0.8)
         
       }
@@ -370,9 +386,14 @@ f_eat2_carto_conta <- function(
                  method = "quantile",
                  legend.values.rnd = 6,
                  legend.pos = "bottomleft",
-                 legend.title.txt = paste("Aliment: ", food_input, "\n",
-                                          "Substance: ", subs_input, " (", unique(ext_data$`Unité`), ")", sep = ""),
-                 legend.nodata = "Analyses non réalisées \nSubstances non détectées",
+                 legend.title.txt = ifelse(lang == "FR",
+                                           paste("Aliment: ", food_input, "\n",
+                                                 "Substance: ", subs_input, " (", unique(ext_data$`Unité`), ")", sep = ""),
+                                           paste("Food item: ", food_input, "\n",
+                                                 "Substance: ", subs_input, " (", unique(ext_data$`Unité`), ")", sep = "")),
+                 legend.nodata = ifelse(lang == "FR",
+                                        "Analyses non réalisées \nSubstances non détectées",
+                                        "Analyses not done \nSubstances not detected"),
                  nclass = min(5, length(unique(ext_data$`Région`))))
     }
     
@@ -393,7 +414,8 @@ f_eat2_plot_conta_bygrp <- function(
     hyp,
     food_table, ## data frame with the all the names of food and corresponding food groups
     subs_table, ## data frame with the all the names of substances and corresponding element of list in d
-    vars
+    vars,
+    lang = "FR"
 ) {
   
   subsgrp <- subs_table$subs_grp[subs_table$subs %in% subs_input]
@@ -426,12 +448,26 @@ f_eat2_plot_conta_bygrp <- function(
   d_nat_grp %>%
     mutate(`Contamination moyenne (nationale)` = round(`Contamination moyenne (nationale)`, 4)) -> d_nat_grp
   
-  g_grp <- ggplot(data = d_nat_grp) +
-    geom_col(fill = "#5770BE",
-             mapping = aes(x = `Groupe d'aliments`,
-                           y = `Contamination moyenne (nationale)`)) +
-    xlab("") + ylab(paste("Substance: ", subs_input,
-                          "\nContamination (", unique(d_nat_grp$`Unité`), ") - Hypothèse ", hyp, sep = "")) +
+  ## translate the variable names (FR -> EN)
+  if (lang == "EN") {
+    d_nat_grp %>%
+      dplyr::rename(`Food group` = `Groupe d'aliments`,
+                    `Average contamination (national scale)` = `Contamination moyenne (nationale)`) -> d_nat_grp
+  }
+  
+  if (lang == "FR") {
+    g_grp <- ggplot(data = d_nat_grp) +
+      geom_col(fill = "#5770BE",
+               mapping = aes(x = `Groupe d'aliments`,
+                             y = `Contamination moyenne (nationale)`))
+  } else {
+    g_grp <- ggplot(data = d_nat_grp) +
+      geom_col(fill = "#5770BE",
+               mapping = aes(x = `Food group`,
+                             y = `Average contamination (national scale)`))
+  }
+  
+  g_grp <- g_grp +
     theme(axis.ticks = element_blank(),
           legend.position = "right",
           # axis.text.y = element_blank(),
@@ -442,6 +478,12 @@ f_eat2_plot_conta_bygrp <- function(
           panel.grid.major.x = element_line(colour = "lightgray"),
           panel.grid.minor.x = element_line(colour = "lightgray")
     ) +
+    xlab("") +
+    ylab(ifelse(lang == "FR",
+                paste("Substance: ", subs_input,
+                      "\nContamination (", unique(d_nat_grp$`Unité`), ") - Hypothèse ", hyp, sep = ""),
+                paste("Substance: ", subs_input,
+                      "\nContamination (", unique(d_nat_grp$`Unité`), ") - Hypothesis ", hyp, sep = ""))) +
     coord_flip()
   
   plotly::ggplotly(g_grp)
@@ -456,7 +498,8 @@ f_eat2_plot_conta_byfood <- function(
     hyp,
     food_table, ## data frame with the all the names of food and corresponding food groups
     subs_table, ## data frame with the all the names of substances and corresponding element of list in d
-    vars
+    vars,
+    lang = "FR"
 ) {
   
   subsgrp <- subs_table$subs_grp[subs_table$subs %in% subs_input]
@@ -487,12 +530,26 @@ f_eat2_plot_conta_byfood <- function(
   d_nat_food %>%
     mutate(`Contamination moyenne (nationale)` = round(`Contamination moyenne (nationale)`, 4)) -> d_nat_food
   
-  g_food <- ggplot(data = d_nat_food) +
-    geom_col(fill = "#5770BE", alpha = 0.5,
-             mapping = aes(x = `Aliments`,
-                           y = `Contamination moyenne (nationale)`)) +
-    xlab("") + ylab(paste("Substance: ", subs_input,
-                          "\nContamination (", unique(d_nat_food$`Unité`), ") - Hypothèse ", hyp, sep = "")) +
+  ## translate the variable names (FR -> EN)
+  if (lang == "EN") {
+    d_nat_food %>%
+      dplyr::rename(`Food items` = `Aliments`,
+                    `Average contamination (national scale)` = `Contamination moyenne (nationale)`) -> d_nat_food
+  }
+  
+  if (lang == "FR") {
+    g_food <- ggplot(data = d_nat_food) +
+      geom_col(fill = "#5770BE", alpha = 0.5,
+               mapping = aes(x = `Aliments`,
+                             y = `Contamination moyenne (nationale)`))
+  } else {
+    g_food <- ggplot(data = d_nat_food) +
+      geom_col(fill = "#5770BE", alpha = 0.5,
+               mapping = aes(x = `Food items`,
+                             y = `Average contamination (national scale)`))
+  }
+  
+  g_food <- g_food +
     theme(axis.ticks = element_blank(),
           legend.position = "right",
           # axis.text.y = element_blank(),
@@ -503,6 +560,12 @@ f_eat2_plot_conta_byfood <- function(
           panel.grid.major.x = element_line(colour = "lightgray"),
           panel.grid.minor.x = element_line(colour = "lightgray")
     ) +
+    xlab("") + 
+    ylab(ifelse(lang == "FR",
+                paste("Substance: ", subs_input,
+                      "\nContamination (", unique(d_nat_food$`Unité`), ") - Hypothèse ", hyp, sep = ""),
+                paste("Substance: ", subs_input,
+                      "\nContamination (", unique(d_nat_food$`Unité`), ") - Hypothesis ", hyp, sep = ""))) +
     coord_flip()
   
   plotly::ggplotly(g_food)
@@ -514,7 +577,8 @@ f_eat2_plot_conta_byfood <- function(
 
 f_eat2_plot_contri_pie <- function(
   df, ## data frame (contribution 2 populations)
-  subs_input ## string: name of the substance
+  subs_input, ## string: name of the substance
+  lang = "FR"
 ) {
   
   df_pie <- subset(df, Substance == subs_input)
@@ -533,7 +597,7 @@ f_eat2_plot_contri_pie <- function(
               hoverinfo = "label+percent",
               hole = 0.3,
               marker = list(colors = mypiecols),
-              name = "Adultes - MB", domain = list(y = c(0.5,1)),
+              name = ifelse(lang == "FR", "Adultes - MB", "Adults - MB"), domain = list(y = c(0.5,1)),
               showlegend = F) %>%
       add_pie(data = subset(df_pie, Population == "Enfants"),
               labels = ~ `Groupe d'aliments`,
@@ -543,12 +607,14 @@ f_eat2_plot_contri_pie <- function(
               hoverinfo = "label+percent",
               hole = 0.3,
               marker = list(colors = mypiecols),
-              name = "Enfants - MB", domain = list(y = c(0,0.5)),
+              name = ifelse(lang == "FR", "Enfants - MB", "Children - MB"), domain = list(y = c(0,0.5)),
               showlegend = F) %>%
       layout(title = list(text = paste("Substance: ", subs_input, sep = ""),
                           font = list(family = "Arial",
                                       size = 24, color = "black")),
-             annotations = list(text = c("Adultes/MB", "Enfants/MB"),
+             annotations = list(text = ifelse(lang == "FR",
+                                              c("Adultes/MB", "Enfants/MB"),
+                                              c("Adults/MB", "Children/MB")),
                                 font = list(family = "Arial",
                                             size = 14, color = "black"),
                                 xref = "paper", yref = "paper",
@@ -568,7 +634,7 @@ f_eat2_plot_contri_pie <- function(
               hoverinfo = "label+percent",
               hole = 0.3,
               marker = list(colors = mypiecols),
-              name = "Adultes - LB", domain = list(x = c(0,0.5), y = c(0.5,1)),
+              name = ifelse(lang == "FR", "Adultes - LB", "Adults - LB"), domain = list(x = c(0,0.5), y = c(0.5,1)),
               showlegend = F) %>%
       add_pie(data = subset(df_pie, Population == "Adultes"),
               labels = ~ `Groupe d'aliments`,
@@ -578,7 +644,7 @@ f_eat2_plot_contri_pie <- function(
               hoverinfo = "label+percent",
               hole = 0.3,
               marker = list(colors = mypiecols),
-              name = "Adultes - UB", domain = list(x = c(0.5, 1), y = c(0.5,1)),
+              name = ifelse(lang == "FR", "Adultes - UB", "Adults - UB"), domain = list(x = c(0.5, 1), y = c(0.5,1)),
               showlegend = F) %>%
       add_pie(data = subset(df_pie, Population == "Enfants"),
               labels = ~ `Groupe d'aliments`,
@@ -588,7 +654,7 @@ f_eat2_plot_contri_pie <- function(
               hoverinfo = "label+percent",
               hole = 0.3,
               marker = list(colors = mypiecols),
-              name = "Enfants - LB", domain = list(x = c(0, 0.5), y = c(0,0.5)),
+              name = ifelse(lang == "FR", "Enfants - LB", "Children - LB"), domain = list(x = c(0, 0.5), y = c(0,0.5)),
               showlegend = F) %>%
       add_pie(data = subset(df_pie, Population == "Enfants"),
               labels = ~ `Groupe d'aliments`,
@@ -598,12 +664,14 @@ f_eat2_plot_contri_pie <- function(
               hoverinfo = "label+percent",
               hole = 0.3,
               marker = list(colors = mypiecols),
-              name = "Enfants - UB", domain = list(x = c(0.5, 1), y = c(0,0.5)),
+              name = ifelse(lang == "FR", "Enfants - UB", "Children - UB"), domain = list(x = c(0.5, 1), y = c(0,0.5)),
               showlegend = F) %>%
       layout(title = list(text = paste("Substance: ", subs_input, sep = ""),
                           font = list(family = "Arial",
                                       size = 24, color = "black")),
-             annotations = list(text = c("Adultes/LB","Adultes/UB", "Enfants/LB", "Enfants/UB"),
+             annotations = list(text = ifelse(lang == "FR",
+                                              c("Adultes/LB","Adultes/UB", "Enfants/LB", "Enfants/UB"),
+                                              c("Adults/LB","Adults/UB", "Children/LB", "Children/UB")),
                                 font = list(family = "Arial",
                                             size = 14, color = "black"),
                                 xref = "paper", yref = "paper",
@@ -634,7 +702,8 @@ f_eat2_plot_contri_pie <- function(
 f_eat2_plot_contri_bar <- function(
     df, ## data frame (contribution 2 populations with the column "Hypothesis" (expanded table))
     subs_input,
-    hyp_input
+    hyp_input,
+    lang = "FR"
 ) {
   
   ## Adultes 
@@ -650,7 +719,10 @@ f_eat2_plot_contri_bar <- function(
       geom_col(fill = "#FF9940", alpha = 0.7) +
       geom_text(aes(label = paste(`Groupe d'aliments`, " (", round(`Contribution`, 2), "%)", sep = "")),
                 y = 0, size = 3, hjust = 0) +
-      xlab("") + ylab("") + labs(title = "Population: Adultes") +
+      xlab("") + ylab("") + 
+      labs(title = ifelse(lang == "FR",
+                          "Population: Adultes",
+                          "Population: Adults")) +
       theme(axis.ticks = element_blank(),
             legend.position = "right",
             axis.text.y = element_blank(),
@@ -677,7 +749,10 @@ f_eat2_plot_contri_bar <- function(
       geom_col(fill = "#00AC8C", alpha = 0.7) +
       geom_text(aes(label = paste(`Groupe d'aliments`, " (", round(`Contribution`, 2), "%)", sep = "")),
                 y = 0, size = 3, hjust = 0) +
-      xlab("") + ylab("") + labs(title = "Population: Enfants") +
+      xlab("") + ylab("") + 
+      labs(title = ifelse(lang == "FR",
+                          "Population: Enfants",
+                          "Population: Children")) +
       theme(axis.ticks = element_blank(),
             legend.position = "right",
             axis.text.y = element_blank(),
@@ -695,11 +770,15 @@ f_eat2_plot_contri_bar <- function(
     ggplot() +
       theme(axis.title = element_blank(),
             panel.background = element_rect(fill="white")) +
-      labs(subtitle = ">>> Les contributions relatives n'ont pas été estimées pour l'hypothèse sélectionnée")
+      labs(subtitle = ifelse(lang == "FR",
+                             ">>> Les contributions relatives n'ont pas été estimées pour l'hypothèse sélectionnée",
+                             ">>> Relative contributions were not estimated with the selected hypothesis in this study"))
   } else {
     gridExtra::grid.arrange(g_A, g_E, nrow = 1,
-                            top = paste("Substance: ", subs_input, " - Hypothèse: ", hyp_input, sep =""),
-                            left = "Groupe d'aliments",
+                            top = ifelse(lang == "FR",
+                                         paste("Substance: ", subs_input, " - Hypothèse: ", hyp_input, sep =""),
+                                         paste("Substance: ", subs_input, " - Hypothesis: ", hyp_input, sep ="")),
+                            left = ifelse(lang == "FR", "Groupe d'aliments", "Food groups"),
                             bottom = "Contribution (%)")
   }
   
