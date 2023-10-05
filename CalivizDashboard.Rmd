@@ -27,7 +27,7 @@ app_lang <<- "FR"
 
 <p style="color:#5770BE"> **Membres du groupe Caliviz**: </p> <p style="color:#5770BE"> Cindy Sotton, Louis Staquet, Caroline Beltran, Julie Neble, Emilie Thiard, Laurence Leon, Ngoc-Du Martin Luong et Nawel Bemrah </p> 
 
-<p style="color:#FF9940">*Dernière mise à jour: le 19 septembre 2023 à 9:00*</p>
+<p style="color:#FF9940">*Dernière mise à jour: le 05 octobre 2023*</p>
 
 
 
@@ -62,6 +62,7 @@ d_subs_pres <- read_excel(path = "data/raw/Caliviz_PresentationSubstances.xlsx",
 inputPanel(
   selectInput("eat2_fam_sub_pres", label = "Substance",
               choices = tapply(d_subs_pres$`Substance_nom`, d_subs_pres$`Famille`, function(x) x))
+              # choices = unique(d_subs_pres$`Substance_nom`))
 )
 
 ```
@@ -71,7 +72,7 @@ inputPanel(
   .nav-pills>li>a:hover, .nav-pills>li>a:focus, .nav-pills>li.active>a,     .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus{background-color: #5770BE;}
 </style>
 ```
-##  {.tabset .tabset-pills data-height="1200,"}
+##  {.tabset .tabset-pills data-height="2000,"}
 
 ### Résumé
 
@@ -122,9 +123,12 @@ renderUI({ HTML(d_subs_pres$Actions_EAT2[d_subs_pres$Substance_nom == input$eat2
 
 ### Tableaux
 
-(Travaux en cours)
+La visualisation interactive des tableaux est en cours de construction. Tous les tableaux peuvent être consultés dans les rapports de l'étude EAT2:
 
+- <a href="https://www.anses.fr/fr/system/files/PASER2006sa0361Ra1.pdf">Tome 1: Contaminants inorganiques, minéraux, polluants organiques persistants, mycotoxines, phyto-estrogènes</a>
 
+- <a href="https://www.anses.fr/fr/system/files/PASER2006sa0361Ra2.pdf">Tome 2: Résidus de pesticides, additifs, acrylamide,
+hydrocarbures aromatiques polycycliques</a>
 
 
 
@@ -282,5 +286,5 @@ La première étape du projet Caliviz a consisté à traiter les données infér
 
 - <a href="https://gitlab.com/data-challenge-gd4h/caliviz/" target="_blank">Gitlab</a> du premier protoype Caliviz (Streamlit) développé dans le cadre du défi Green Data for Health.
 
-
-
+<h3>Une question ?</h3>
+Contactez-nous: caliviz@anses.fr
