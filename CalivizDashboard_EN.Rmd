@@ -47,31 +47,32 @@ According to the results of the latest edition of the Total Diet Study (TDS), he
 ANSES's mission is to help ensure health safety in the areas of food, the environment and work. In this context, in 2006 it launched its second total diet study (EAT 2), with the objectives of describing the dietary exposure of the French population to substances of interest in terms of public health, on the other hand, to characterize the health risks linked to food and associated with these substances [...]
 <a href="https://www.anses.fr/fr/content/%C3%A9tude-de-l%E2%80%99alimentation-totale-eat-2-l%E2%80%99anses-met-%C3%A0-disposition-les-donn%C3%A9es-de-son-analyse" target="_blank">See more... </a>
 
-<!-- # Substances -->
+# Substances
 
-<!-- *This tab allows users to obtain, interactively with the drop-down menu below, information relating to the substances or families of substances analyzed in the EAT2 study and synthesized from the study's scientific reports.* -->
+*This tab allows users to obtain, interactively with the drop-down menu below, information relating to the substances or families of substances analyzed in the EAT2 study and synthesized from the study's scientific reports.*
 
-<!-- ```{r packages, echo=FALSE, message=FALSE, warning=FALSE} -->
-<!-- source("R/packages.R") -->
+```{r packages, echo=FALSE, message=FALSE, warning=FALSE}
+source("R/packages.R")
 
-<!-- ``` -->
+```
 
-<!-- ```{r subs_pres, echo=FALSE} -->
-<!-- d_subs_pres <- read_excel(path = "data/raw/Caliviz_PresentationSubstances.xlsx", sheet = "FR") -->
+```{r subs_pres, echo=FALSE}
+d_subs_pres <- read_excel(path = "data/raw/Caliviz_PresentationSubstances.xlsx",
+                          sheet = "EN")
 
-<!-- inputPanel( -->
-<!--   selectInput("eat2_fam_sub_pres", label = "Substance", -->
-<!--               choices = tapply(d_subs_pres$`Substance_nom`, d_subs_pres$`Famille`, function(x) x)) -->
-<!-- ) -->
+inputPanel(
+  selectInput("eat2_fam_sub_pres", label = "Substance",
+              choices = tapply(d_subs_pres$`Substance_nom`, d_subs_pres$`Famille`, function(x) x))
+)
 
-<!-- ``` -->
+```
 
-<!-- ```{=html} -->
-<!-- <style> -->
-<!--   .nav-pills>li>a:hover, .nav-pills>li>a:focus, .nav-pills>li.active>a,     .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus{background-color: #5770BE;} -->
-<!-- </style> -->
-<!-- ``` -->
-<!-- ##  {.tabset .tabset-pills data-height="1200,"} -->
+```{=html}
+<style>
+  .nav-pills>li>a:hover, .nav-pills>li>a:focus, .nav-pills>li.active>a,     .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus{background-color: #5770BE;}
+</style>
+```
+##  {.tabset .tabset-pills data-height="1200,"}
 
 <!-- ### Summary -->
 
@@ -79,45 +80,50 @@ ANSES's mission is to help ensure health safety in the areas of food, the enviro
 <!-- renderUI({ HTML(d_subs_pres$Abstract[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) }) -->
 <!-- ``` -->
 
-<!-- ### Details -->
+### Detailed presentation
 
-<!-- #####  -->
+#####
 
-<!-- ```{r echo=FALSE} -->
-<!-- renderUI({ HTML(d_subs_pres$GeneralInfo[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) }) -->
-<!-- ``` -->
+```{r echo=FALSE}
+renderUI({ HTML(d_subs_pres$GeneralInfo[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) })
+```
 
-<!-- ##### Hazard characterization -->
+##### Hazard characterization
 
-<!-- ```{r echo=FALSE} -->
-<!-- renderUI({ HTML(d_subs_pres$Hazards[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) }) -->
-<!-- ``` -->
+```{r echo=FALSE}
+renderUI({ HTML(d_subs_pres$Hazards[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) })
+```
 
-<!-- ##### Risk assessment and characterization -->
+##### Risk assessment and characterization
 
-<!-- ```{r echo=FALSE} -->
-<!-- renderUI({ HTML(d_subs_pres$Risks[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) }) -->
-<!-- ``` -->
+```{r echo=FALSE}
+renderUI({ HTML(d_subs_pres$Risks[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) })
+```
 
-<!-- ##### Summarized conclusions of the TDS -->
+##### Summarized conclusions of the TDS
 
-<!-- ###### Toxicological risks -->
+###### Toxicological risks
 
-<!-- ```{r echo=FALSE} -->
-<!-- renderUI({ HTML(d_subs_pres$ToxicoRisk_EAT2[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) }) -->
-<!-- ``` -->
+```{r echo=FALSE}
+renderUI({ HTML(d_subs_pres$ToxicoRisk_EAT2[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) })
+```
 
-<!-- ###### Nutritional risks -->
+###### Nutritional risks
 
-<!-- ```{r echo=FALSE} -->
-<!-- renderUI({ HTML(d_subs_pres$NutriRisk_EAT2[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) }) -->
-<!-- ``` -->
+```{r echo=FALSE}
+renderUI({ HTML(d_subs_pres$NutriRisk_EAT2[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) })
+```
 
-<!-- ###### Actions and research perspectives -->
+###### Actions and research perspectives
 
-<!-- ```{r echo=FALSE} -->
-<!-- renderUI({ HTML(d_subs_pres$Actions_EAT2[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) }) -->
-<!-- ``` -->
+```{r echo=FALSE}
+renderUI({ HTML(d_subs_pres$Actions_EAT2[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) })
+```
+
+### Tables
+
+(Work in progress)
+
 
 # Contamination data
 

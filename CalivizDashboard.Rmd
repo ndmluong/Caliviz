@@ -119,6 +119,15 @@ renderUI({ HTML(d_subs_pres$NutriRisk_EAT2[d_subs_pres$Substance_nom == input$ea
 renderUI({ HTML(d_subs_pres$Actions_EAT2[d_subs_pres$Substance_nom == input$eat2_fam_sub_pres]) })
 ```
 
+
+### Tableaux
+
+(Travaux en cours)
+
+
+
+
+
 # Données de contamination
 
 ##  {.tabset .tabset-pills data-height="1300,"}
@@ -215,7 +224,7 @@ L'exposition est calculée pour tous les individus et une exposition moyenne de 
 
 Si l'on souhaite connaître la part apportée par chaque groupe d'aliments dans cette quantité de substance ingérée par la population, on parlera de contribution à l'exposition totale. Celle-ci, exprimée en pourcentage, représente la quantité de substance apportée par un groupe d'aliments par rapport à tout le régime alimentaire. La somme des contributions est égale à 100%.
 
-*(en cours de construction, toutes les familles de substances ne sont pas intégrées)*
+*(en cours de construction, toutes les familles de substances ne sont pas encore intégrées)*
 
 ##### 
 
