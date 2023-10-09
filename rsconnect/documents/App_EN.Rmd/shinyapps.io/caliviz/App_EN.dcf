@@ -1,0 +1,13 @@
+name: App_EN
+title: App_EN
+username: caliviz
+account: caliviz
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 10132212
+bundleId: 7780264
+url: https://caliviz.shinyapps.io/App_EN/
+version: 1
+asMultiple: TRUE
+asStatic: FALSE
+ignoredFiles: data/processed/processed_data_eat2_V6_FR.RData|App_FR.Rmd|CalivizWebApp.Rmd

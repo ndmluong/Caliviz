@@ -21,12 +21,12 @@ ui_carto <- fluidPage(
                         fluidRow(
                           column(6, selectInput("eat2_single_food", "Choisir un aliment",
                                                 tapply(food_tab_eat2$food, food_tab_eat2$food_grp, function(x) x),
-                                                selected = "veau",
+                                                selected = "huître",
                                                 multiple = FALSE)),
 
                           column(6, selectInput("eat2_single_subs", "Choisir une substance",
                                                 tapply(subs_tab_eat2$subs, subs_tab_eat2$subs_grp, function(x) x),
-                                                selected = "Bpa",
+                                                selected = "Cd",
                                                 multiple = FALSE))
                         ),
                         fluidRow(
