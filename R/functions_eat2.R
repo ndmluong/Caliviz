@@ -608,22 +608,40 @@ f_eat2_plot_contri_pie <- function(
               hole = 0.3,
               marker = list(colors = mypiecols),
               name = ifelse(lang == "FR", "Enfants - MB", "Children - MB"), domain = list(y = c(0,0.5)),
-              showlegend = F) %>%
-      layout(title = list(text = paste("Substance: ", subs_input, sep = ""),
-                          font = list(family = "Arial",
-                                      size = 24, color = "black")),
-             annotations = list(text = ifelse(lang == "FR",
-                                              c("Adultes/MB", "Enfants/MB"),
-                                              c("Adults/MB", "Children/MB")),
-                                font = list(family = "Arial",
-                                            size = 14, color = "black"),
-                                xref = "paper", yref = "paper",
-                                yanchor = "top", xanchor = "center",
-                                align = "center",
-                                x = c(0.5, 0.5),
-                                y = c(0.76, 0.26),
-                                showarrow = F),
-             margin = list(l = 10, r = 10, b = 10, t = 80, pad = 4))
+              showlegend = F) -> plot_output 
+    
+      if (lang == "FR") {
+        plot_output %>%
+          layout(title = list(text = paste("Substance: ", subs_input, sep = ""),
+                              font = list(family = "Arial",
+                                          size = 24, color = "black")),
+                 annotations = list(text = c("Adultes/MB", "Enfants/MB"),
+                                    font = list(family = "Arial",
+                                                size = 14, color = "black"),
+                                    xref = "paper", yref = "paper",
+                                    yanchor = "top", xanchor = "center",
+                                    align = "center",
+                                    x = c(0.5, 0.5),
+                                    y = c(0.76, 0.26),
+                                    showarrow = F),
+                 margin = list(l = 10, r = 10, b = 10, t = 80, pad = 4)) -> plot_output
+      } else {
+        plot_output %>%
+          layout(title = list(text = paste("Substance: ", subs_input, sep = ""),
+                              font = list(family = "Arial",
+                                          size = 24, color = "black")),
+                 annotations = list(text = c("Adults/MB", "Children/MB"),
+                                    font = list(family = "Arial",
+                                                size = 14, color = "black"),
+                                    xref = "paper", yref = "paper",
+                                    yanchor = "top", xanchor = "center",
+                                    align = "center",
+                                    x = c(0.5, 0.5),
+                                    y = c(0.76, 0.26),
+                                    showarrow = F),
+                 margin = list(l = 10, r = 10, b = 10, t = 80, pad = 4)) -> plot_output
+      }
+    
   } else {
     plotly::plot_ly() %>%
       add_pie(data = subset(df_pie, Population == "Adultes"),
@@ -809,6 +827,73 @@ f_eat2_plot_contri_bar <- function(
 
 
 
+
+
+f_eat2_identify_hazards <- function(
+    d,
+    fi, ## food_input
+    food_table,
+    subs_table,
+    vars,
+    lang = "FR"
+) {
+  lapply(d, function(dst) { ## pour chaque famille de substances
+    
+    subs_list <- names(dst)[!names(dst) %in% vars] ## extraire la liste des substances concernees
+    
+    sapply(subs_list, function(sb) {
+      if (all(is.na(dst[dst$`Libellé` == fi ,sb]))) {
+        return(NA)
+      } else {
+        ## Regle V2: matrice de presence significative = 1 s'il y a au moins une donnees NQ ou chiffree
+        dst %>%
+          dplyr::select(., `Type`, `Libellé`, sb) %>%
+          dplyr::filter(., `Libellé` == fi) -> ext_dst ## extraire des donnees correspondant a la substance sb et l'aliment fi
+        
+        # compter le nombre de NQ
+        ndNQ <- sum(ext_dst[[sb]] == "NQ", na.rm = T)
+        
+        # compter le nombre de donnees quantifiees
+        vec_dq <- suppressWarnings(as.numeric(ext_dst[[sb]])) # conversion string en valeur numerique, si ND/NQ/NR ça devient NA
+        vec_dq <- vec_dq[!is.na(vec_dq)] # enlever les NA nouvellement crees
+        ndq <- length(vec_dq)
+        
+        # regle
+        if (ndNQ >= 1 || ndq >= 1) { # s'il y a au moins une NQ ou au moins une donnee quantifiee
+          return(sb) # matrice de presence significative = 1
+        } else {
+          return(NA)}
+      }
+    }) -> subs_vec
+    
+    subs_vec <- unname(subs_vec[!is.na(subs_vec)])
+    
+    subs_vec <- paste("(",length(subs_vec),")  ",
+                      stringr::str_c(subs_vec, collapse = ", "),
+                      sep = "")
+    
+    return(subs_vec)
+    
+  }) %>%
+    as.data.frame() -> hazards_output
+  
+  names(hazards_output) <- names(df_eat2)
+  hazards_output <- t(hazards_output)
+  
+  hazards_output <- data.frame(rownames(hazards_output),
+                               hazards_output)
+  
+  if (lang == "FR") {
+    colnames(hazards_output) <- c("Famille de substances", "Dangers identifiés")
+  } else {
+    colnames(hazards_output) <- c("Substances family", "Identified hazards")
+  }
+  
+  rownames(hazards_output) <- 1:nrow(hazards_output)
+  
+  return(hazards_output)
+  
+}
 
 
 

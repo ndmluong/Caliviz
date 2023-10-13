@@ -1,0 +1,32 @@
+---
+title: "--- Caliviz ---"
+output:
+  html_document:
+    theme: flatly
+    css: "www/CalivizWebApp.css"
+    number_sections: FALSE
+runtime: shiny
+---
+
+```{=html}
+<style> div.main-container { max-width: 1000px; } </style>
+```
+
+```{r wehavemoved, echo = F, out.width = '40%', fig.align= "center"}
+knitr::include_graphics("fig/wehavemoved.png")
+```
+
+<center>
+
+Afin de vous offir une meilleure expérience utilisateur, l'application Caliviz déménage et est disponible désormais en version française et anglaise.
+
+*The Caliviz tool has moved and is now available in both French and English versions to give a better user experience.*
+
+
+Retrouvez-nous ici / *Find us here* :
+
+\>\>\> ![](fig/flag_FR.png){width=20px} [Français](https://caliviz.shinyapps.io/App_FR) \<\<\<
+
+\>\>\> ![](fig/flag_EN.png){width=20px} [English](https://caliviz.shinyapps.io/App_EN) \<\<\<
+
+</center>

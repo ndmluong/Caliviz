@@ -27,7 +27,7 @@ app_lang <<- "EN"
 
 <p style="color:#5770BE"> **Members of the Caliviz project group**: </p> <p style="color:#5770BE"> Cindy Sotton, Louis Staquet, Caroline Beltran, Julie Neble, Emilie Thiard, Laurence Leon, Ngoc-Du Martin Luong et Nawel Bemrah </p> 
 
-<p style="color:#FF9940">*Last update: September 19th 2023 *</p>
+<p style="color:#FF9940">*Last update: October 10th 2023 *</p>
 
 ![](www/fig/flag_FR.png){width=20px} [FR](https://caliviz.shinyapps.io/App_FR)   -   ![](www/fig/flag_EN.png){width=20px} EN 
 
@@ -179,6 +179,33 @@ shinyApp(
   options = list(height = 1080, width = 1200)
 )
 ```
+
+
+### Hazards list
+
+This tab enables to determine, based on data from the TDS2 study, the list of substances that are significantly present in a selected food. The significant presence of a substance in a food item is defined by at least its detection or quantification (*significant presence: NQ or numerical value*).
+
+*Select a food item from the list (select with the drop-down menu or enter the names of the food item, then click on "Hazards list"*
+
+```{r ShinyApp_HI_EN, echo=FALSE, message=FALSE, warning=FALSE}
+## User interface ####
+source("R/_ui_HI_EN.R")
+
+## Server ####
+source("R/_server_HI.R")
+
+shinyApp(
+  ui = ui_HI_EN,
+  server = server_HI,
+  options = list(height = 1080, width = 1200)
+)
+```
+
+
+
+
+
+
 
 ### Contamination level
 

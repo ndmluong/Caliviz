@@ -176,4 +176,7 @@ rm(dico_food, dico_foodgrp, dico_subs, dico_subsgrp, dico_subsnames, eat2_dico)
 rm(j)
 
 
+# FUNCTIONS ####
+source("R/functions_eat2.R")
+
 save.image("data/processed/processed_data_eat2_V6_EN.RData")

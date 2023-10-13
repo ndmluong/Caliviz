@@ -27,7 +27,7 @@ app_lang <<- "FR"
 
 <p style="color:#5770BE"> **Membres du groupe Caliviz**: </p> <p style="color:#5770BE"> Cindy Sotton, Louis Staquet, Caroline Beltran, Julie Neble, Emilie Thiard, Laurence Leon, Ngoc-Du Martin Luong et Nawel Bemrah </p> 
 
-<p style="color:#FF9940">*Dernière mise à jour: le 05 octobre 2023*</p>
+<p style="color:#FF9940">*Dernière mise à jour: le 10 octobre 2023*</p>
 
 ![](www/fig/flag_FR.png){width=20px} FR   -   ![](www/fig/flag_EN.png){width=20px} [EN](https://caliviz.shinyapps.io/App_EN)
 
@@ -182,6 +182,30 @@ shinyApp(
   options = list(height = 1080, width = 1200)
 )
 ```
+
+
+### Identification des dangers
+
+Cet onglet permet de déterminer, en se basant sur les données des études EAT2, la liste des substances qui sont significativement présentes dans un aliment sélectionné. La présence significative d'une substance dans un aliment se définit ici *a minima* par une détection ou une quantification (*présence significative: NQ ou valeur chiffrée*).
+
+*Pour visualiser: sélectionner un aliment dans la liste (sélectionner avec le menu déroulant ou entrer les noms des aliments); cliquer sur "Liste des dangers".*
+
+```{r ShinyApp_HI, echo=FALSE, message=FALSE, warning=FALSE}
+## User interface ####
+source("R/_ui_HI.R")
+
+## Server ####
+source("R/_server_HI.R")
+
+shinyApp(
+  ui = ui_HI,
+  server = server_HI,
+  options = list(height = 1080, width = 1200)
+)
+```
+
+
+
 
 ### Niveaux de contamination
 
