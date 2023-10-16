@@ -1,0 +1,22 @@
+project:
+  type: website
+  render: 
+    - index.qmd
+
+website:
+  title: "Caliviz"
+  
+execute: 
+  echo: false
+  warning: false
+
+format:
+  html:
+    theme: flatly
+    page-layout: full
+    fig-align: center
+    smooth-scroll: true
+
+
+
+

@@ -18,20 +18,16 @@ runtime: shiny
 ```
 # Accueil
 
-<h1> <center> Caliviz - Outil interactif permettant la visualisation des substances chimiques auxquelles est exposée la population française via son alimentation </center> </h1>
-
 ```{r webappheader, echo = F, out.width = '100%'}
 knitr::include_graphics("www/fig/caliviz_dashboardheader.png")
 app_lang <<- "FR"
 ```
 
-<p style="color:#5770BE"> **Membres du groupe Caliviz**: </p> <p style="color:#5770BE"> Cindy Sotton, Louis Staquet, Caroline Beltran, Julie Neble, Emilie Thiard, Laurence Leon, Ngoc-Du Martin Luong et Nawel Bemrah </p> 
+<p align="right" style="color:#FF9940">*Dernière mise à jour: le 10 octobre 2023*</p>
 
-<p style="color:#FF9940">*Dernière mise à jour: le 10 octobre 2023*</p>
+<p align="right"> ![](www/fig/flag_FR.png){width=20px} FR   -   ![](www/fig/flag_EN.png){width=20px} [EN](https://caliviz.shinyapps.io/App_EN) </p>
 
-![](www/fig/flag_FR.png){width=20px} FR   -   ![](www/fig/flag_EN.png){width=20px} [EN](https://caliviz.shinyapps.io/App_EN)
-
-
+<h1> Un outil interactif permettant la visualisation des substances chimiques auxquelles est exposée la population française via son alimentation </h1>
 
 <h3>Contexte et enjeu</h3>
 
@@ -309,3 +305,5 @@ La première étape du projet Caliviz a consisté à traiter les données infér
 
 <h3>Une question ?</h3>
 Contactez-nous: caliviz@anses.fr
+
+<p style="color:#5770BE"> **Membres du groupe Caliviz**: </p> <p style="color:#5770BE"> Cindy Sotton, Louis Staquet, Caroline Beltran, Julie Neble, Emilie Thiard, Laurence Leon, Ngoc-Du Martin Luong et Nawel Bemrah </p> 

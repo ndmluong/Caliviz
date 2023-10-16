@@ -1,0 +1,24 @@
+---
+about:
+  template: jolla
+  links:
+    - icon: envelope
+      text: Contact
+      href: "mailto:caliviz@anses.fr"  
+---
+
+```{r calivizlogo, echo = F, out.width = '250px'}
+knitr::include_graphics("www/fig/caliviz_logo.png")
+```
+
+```{=html}
+<div  style="margin: 10px; text-align: center;">
+<a class="btn btn-primary" href="https://caliviz.shinyapps.io/App_FR/" role="button" target="_self" style="padding: 8px 16px;">Français</a>
+</div>
+
+<div  style="margin: 5px; text-align: center;">
+<a class="btn btn-primary" href="https://caliviz.shinyapps.io/App_EN/" role="button" target="_self" style="padding: 8px 16px;">English</a>
+</div>
+
+```
+

@@ -18,22 +18,20 @@ runtime: shiny
 ```
 # Home
 
-<h1> <center> Caliviz - An interactive tool for visualizing the dietary exposure of the French population to chemicals </center> </h1>
+
 
 ```{r webappheader, echo = F, out.width = '100%'}
 knitr::include_graphics("www/fig/caliviz_dashboardheader.png")
 app_lang <<- "EN"
 ```
 
-<p style="color:#5770BE"> **Members of the Caliviz project group**: </p> <p style="color:#5770BE"> Cindy Sotton, Louis Staquet, Caroline Beltran, Julie Neble, Emilie Thiard, Laurence Leon, Ngoc-Du Martin Luong et Nawel Bemrah </p> 
+<p align="right" style="color:#FF9940">*Last update: October 10th 2023 *</p>
 
-<p style="color:#FF9940">*Last update: October 10th 2023 *</p>
-
-![](www/fig/flag_FR.png){width=20px} [FR](https://caliviz.shinyapps.io/App_FR)   -   ![](www/fig/flag_EN.png){width=20px} EN 
+<p align="right">![](www/fig/flag_FR.png){width=20px} [FR](https://caliviz.shinyapps.io/App_FR)   -   ![](www/fig/flag_EN.png){width=20px} EN </p>
 
 
 
-
+<h1> An interactive tool for visualizing the dietary exposure of the French population to chemicals </h1>
 
 
 
@@ -310,3 +308,4 @@ The data integrated into this visualization tool come from the total diet study 
 <h3>Contact</h3>
 Email us at: caliviz@anses.fr
 
+<p style="color:#5770BE"> **Members of the Caliviz project group**: </p> <p style="color:#5770BE"> Cindy Sotton, Louis Staquet, Caroline Beltran, Julie Neble, Emilie Thiard, Laurence Leon, Ngoc-Du Martin Luong et Nawel Bemrah </p> 

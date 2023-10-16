@@ -5,7 +5,7 @@ account: caliviz
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 10132212
-bundleId: 7800468
+bundleId: 7808399
 url: https://caliviz.shinyapps.io/App_EN/
 version: 1
 asMultiple: TRUE

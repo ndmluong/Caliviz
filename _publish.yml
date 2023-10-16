@@ -1,0 +1,4 @@
+- source: project
+  quarto-pub:
+    - id: 7e2c44b7-6a97-428f-af5d-3e5992385567
+      url: 'https://quartopub.com/sites/caliviz/home'
